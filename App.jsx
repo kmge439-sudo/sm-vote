@@ -24,7 +24,7 @@ const db = getFirestore(app);
 const appId = "shinmyung-election-2026";
 
 // ==========================================
-// [보안 데이터] 기초 데이터 (동기화 전용)
+// [보안 데이터] 849명 전교생 고유 인증 코드 전체 리스트
 // ==========================================
 const AUTH_CODES_RAW = {
   "1101강은재": "8241", "1102권다은": "3192", "1103김나윤": "5674", "1104김미소": "1209", "1105김보민": "9932", "1106김서하": "4421", "1107김소정": "6712", "1108김수민": "2389", "1109김수윤": "7710", "1110김수현": "1543",
@@ -86,13 +86,13 @@ const AUTH_CODES_RAW = {
   "3926조민영": "3440", "3927지예안": "9099", "3928최은교": "1218", "3929허윤서": "5762", "3930황서영": "8856"
 };
 
-// 동기화용 데이터 정제
-const FINAL_AUTH_CODES = {};
+// 학생별 고유 코드 데이터 정제 로직
+const FINAL_AUTH_CODES_LIST = {};
 Object.entries(AUTH_CODES_RAW).forEach(([key, val]) => {
   const cleanKey = key.replace(/\|/g, "").replace(/\s/g, "");
   const match = cleanKey.match(/(\d{4})(.+)/);
-  if (match) { FINAL_AUTH_CODES[match[1] + match[2]] = val.replace(/\*/g, "").trim(); }
-  else { FINAL_AUTH_CODES[cleanKey] = val.replace(/\*/g, "").trim(); }
+  if (match) { FINAL_AUTH_CODES_LIST[match[1] + match[2]] = val.replace(/\*/g, "").trim(); }
+  else { FINAL_AUTH_CODES_LIST[cleanKey] = val.replace(/\*/g, "").trim(); }
 });
 
 const INITIAL_CANDIDATES = {
@@ -224,7 +224,7 @@ export default function App() {
       await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'candidates'), INITIAL_CANDIDATES);
       await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'adminAccount'), { id: 'kmge439', pw: 'dkssud2323!' });
       const batch = writeBatch(db);
-      Object.entries(FINAL_AUTH_CODES).forEach(([key, code]) => {
+      Object.entries(FINAL_AUTH_CODES_LIST).forEach(([key, code]) => {
         batch.set(doc(db, 'artifacts', appId, 'public', 'data', 'authVault', key), { code });
       });
       await batch.commit();
@@ -236,9 +236,7 @@ export default function App() {
   const deleteStudent = async (studentKey) => {
     if (!confirm(`${studentKey} 학생의 모든 데이터를 삭제하시겠습니까?`)) return;
     try {
-      // 1. 인증 금고 삭제
       await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'authVault', studentKey));
-      // 2. 투표 완료 기록 및 투표 내용 삭제 (있을 경우)
       await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'voters', studentKey));
       await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'votes', studentKey));
     } catch (e) { alert("삭제 실패: " + e.message); }
@@ -325,7 +323,7 @@ export default function App() {
     link.click();
   };
 
-  const filteredStudents = useMemo(() => {
+  const filteredStudentsList = useMemo(() => {
     return dbStudents.filter(s => {
       const matchGrade = filterGrade === 'all' || s.key.startsWith(filterGrade);
       const matchSearch = s.key.includes(searchQuery);
@@ -454,7 +452,6 @@ export default function App() {
         ) : (
           /* --- 관리자 패널 --- */
           <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-200 overflow-hidden text-slate-900">
-            {/* 모달 공통 레이어 */}
             {!!(resetConfirm || showResetAllModal) && (
               <div className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center">
                 <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in text-slate-900">
@@ -464,7 +461,7 @@ export default function App() {
                   <h4 className="text-xl font-black mb-2">{resetConfirm ? '개별 리셋' : '전체 초기화'}</h4>
                   <p className="text-sm text-slate-500 font-bold mb-6">{resetConfirm ? '데이터를 삭제하시겠습니까?' : '주의! 모든 투표 결과가 삭제됩니다.'}</p>
                   <div className="flex gap-3 text-slate-900">
-                    <button onClick={() => {setResetConfirm(null); setShowResetAllModal(false);}} className="flex-1 py-3 bg-slate-100 rounded-xl font-bold">취소</button>
+                    <button onClick={() => {setResetConfirm(null); setShowResetAllModal(false);}} className="flex-1 py-3 bg-slate-100 rounded-xl font-bold text-slate-900">취소</button>
                     <button onClick={resetConfirm ? () => handleResetVoter(resetConfirm) : handleResetAllVotes} className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg">진행</button>
                   </div>
                 </div>
@@ -492,7 +489,6 @@ export default function App() {
                   <button onClick={()=>setAdminTab('system')} className={`flex-1 py-3 px-4 rounded-xl font-black text-xs whitespace-nowrap ${adminTab === 'system' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500'}`}>시스템 설정</button>
                 </div>
 
-                {/* Tab: 집계 */}
                 {adminTab === 'stats' && (
                   <div className="space-y-10">
                     <div className="flex justify-between items-center gap-4">
@@ -530,7 +526,6 @@ export default function App() {
                   </div>
                 )}
 
-                {/* Tab: 명단 관리 (시간 표시 복구 및 삭제 수정) */}
                 {adminTab === 'students' && (
                   <div className="space-y-6 text-slate-900">
                     <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 text-slate-900">
@@ -552,7 +547,7 @@ export default function App() {
                     </div>
 
                     <div className="flex gap-4 text-slate-900">
-                      <div className="relative flex-1 text-slate-900"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input placeholder="이름 검색..." className="w-full p-3 pl-9 bg-slate-50 border rounded-xl text-xs font-bold outline-none text-slate-900" onChange={e=>setSearchQuery(e.target.value)} /></div>
+                      <div className="relative flex-1 text-slate-900"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input placeholder="학번 또는 이름 검색..." className="w-full p-3 pl-9 bg-slate-50 border rounded-xl text-xs font-bold outline-none text-slate-900" onChange={e=>setSearchQuery(e.target.value)} /></div>
                       <button onClick={handleExportVoters} className="p-3 bg-emerald-50 text-emerald-600 rounded-xl font-black text-xs flex items-center gap-2 shadow-sm"><Download size={14}/> 명단 엑셀</button>
                     </div>
 
@@ -561,19 +556,19 @@ export default function App() {
                         <thead className="bg-slate-50 font-black sticky top-0 text-slate-900">
                           <tr>
                             <th className="p-4">학번/이름</th>
-                            <th className="p-4">코드</th>
+                            <th className="p-4 text-center">코드</th>
                             <th className="p-4 text-center">상태</th>
                             <th className="p-4 text-center whitespace-nowrap">투표 시간</th>
                             <th className="p-4 text-center">관리</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y text-slate-900">
-                          {filteredStudents.map(s => {
+                          {filteredStudentsList.map(s => {
                             const voterData = dbVoters[s.key];
                             return (
                               <tr key={s.key} className="hover:bg-slate-50 text-slate-900">
                                 <td className="p-4 font-black">{s.key}</td>
-                                <td className="p-4 font-sans text-blue-600 font-bold">{s.code}</td>
+                                <td className="p-4 text-center font-sans text-blue-600 font-bold">{s.code}</td>
                                 <td className="p-4 text-center">
                                   <span className={`px-2 py-1 rounded font-black text-[9px] ${voterData ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'}`}>
                                     {voterData ? '완료' : '미참여'}
@@ -583,9 +578,7 @@ export default function App() {
                                   {voterData?.votedAt ? (
                                     <span className="flex items-center justify-center gap-1">
                                       <Clock size={10} className="text-blue-400" />
-                                      {new Date(voterData.votedAt).toLocaleString('ko-KR', { 
-                                        month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false 
-                                      })}
+                                      {new Date(voterData.votedAt).toLocaleString('ko-KR', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false })}
                                     </span>
                                   ) : '-'}
                                 </td>
@@ -645,24 +638,24 @@ export default function App() {
                     </div>
                     <div className="bg-amber-50 p-8 rounded-[2.5rem] border border-amber-100">
                       <h4 className="font-black text-amber-800 mb-2">⚠ 데이터 강제 동기화</h4>
-                      <p className="text-xs text-amber-700 font-bold mb-6 leading-tight">코드의 849명 명단을 DB로 즉시 전송합니다. 명단이 비어있을 때 사용하세요.</p>
+                      <p className="text-xs text-amber-700 font-bold mb-6 leading-tight">코드 내의 849명 명단 데이터를 DB 서버로 전송합니다. 초기 1회 실행하세요.</p>
                       <button onClick={syncAllData} disabled={isSyncing} className="w-full py-4 bg-amber-600 text-white rounded-3xl font-black shadow-lg flex items-center justify-center gap-2">
                         {isSyncing ? <RefreshCw className="animate-spin" /> : <Save />} 명단 DB 이관 실행
                       </button>
                     </div>
-                    <button onClick={() => setShowResetAllModal(true)} className="w-full py-4 bg-rose-50 text-rose-600 border border-rose-200 rounded-3xl font-black text-sm flex items-center justify-center gap-2"><Trash2 size={16}/> 전체 투표 데이터 초기화</button>
+                    <button onClick={() => setShowResetAllModal(true)} className="w-full py-4 bg-rose-50 text-rose-600 border border-rose-200 rounded-3xl font-black text-sm flex items-center justify-center gap-2 text-rose-600"><Trash2 size={16}/> 전체 투표 데이터 초기화</button>
                   </div>
                 )}
               </div>
             )}
           </div>
         )}
-        <div className="mt-20 pt-10 border-t border-slate-200 text-center">
+        <div className="mt-20 pt-10 border-t border-slate-200 text-center text-slate-900">
           {!showAdminPanel && (
-            <button onClick={() => setShowAdminPanel(true)} className="flex items-center gap-2 mx-auto text-slate-400 hover:text-blue-600 font-bold text-sm transition-colors uppercase tracking-[0.2em] font-sans"><BarChart3 size={16} /> Admin Suite V6.0</button>
+            <button onClick={() => setShowAdminPanel(true)} className="flex items-center gap-2 mx-auto text-slate-400 hover:text-blue-600 font-bold text-sm transition-colors uppercase tracking-[0.2em] font-sans"><BarChart3 size={16} /> Admin Mode</button>
           )}
         </div>
-        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em] font-sans text-slate-900">EMS Terminal V6.0 Final Build</footer>
+        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em] font-sans text-slate-900">EMS Terminal V6.1 Final Build</footer>
       </div>
     </div>
   );
