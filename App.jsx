@@ -86,6 +86,7 @@ const AUTH_CODES_RAW = {
   "3926조민영": "3440", "3927지예안": "9099", "3928최은교": "1218", "3929허윤서": "5762", "3930황서영": "8856"
 };
 
+// 학생별 고유 코드 데이터 정제
 const FINAL_AUTH_CODES = {};
 Object.entries(AUTH_CODES_RAW).forEach(([key, val]) => {
   const cleanKey = key.replace(/\|/g, "").replace(/\s/g, "");
@@ -140,7 +141,7 @@ export default function App() {
   const [selectedVP2, setSelectedVP2] = useState(null);
   const [selectedVP3, setSelectedVP3] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [votingState, setVotingState] = useState('ready'); // ready, active, finished
+  const [votingState, setVotingState] = useState('ready'); 
   
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -190,7 +191,7 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // 투표 상태 실시간 감시
+  // 투표 상태 모니터링
   useEffect(() => {
     if (!user) return;
     const settingsRef = doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'votingControl');
@@ -366,7 +367,7 @@ export default function App() {
         <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-slate-100">
           <CheckCircle size={80} className="text-emerald-500 mx-auto mb-6" />
           <h2 className="text-3xl font-black mb-4 tracking-tight text-slate-900">투표 제출 완료</h2>
-          <p className="text-slate-600 mb-8 font-medium font-sans">참여해 주셔서 감사합니다.</p>
+          <p className="text-slate-600 mb-8 font-medium font-sans text-slate-900">참여해 주셔서 감사합니다.</p>
           <button onClick={() => window.location.reload()} className="w-full py-5 bg-slate-900 text-white rounded-2xl font-black transition-all active:scale-95">닫기</button>
         </div>
       </div>
@@ -379,7 +380,7 @@ export default function App() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full mb-4 uppercase tracking-[0.2em] shadow-lg">
-            <Lock size={12} /> SECURED SYSTEM V5.4
+            <Lock size={12} /> SECURED SYSTEM V5.5
           </div>
           <h1 className="text-4xl font-black mb-2 tracking-tighter text-slate-900">2026학년도 신명여자중학교 전교 회장단 선거</h1>
         </div>
@@ -390,21 +391,21 @@ export default function App() {
               <div className="bg-white rounded-[2.5rem] shadow-2xl p-10 border border-slate-100 animate-in slide-in-from-bottom-4 duration-500">
                 {votingState === 'active' ? (
                   <>
-                    <div className="flex items-center gap-4 mb-10">
+                    <div className="flex items-center gap-4 mb-10 text-slate-900">
                       <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl shadow-inner"><Fingerprint size={28} strokeWidth={2.5} /></div>
                       <h2 className="text-2xl font-black">본인 확인 및 인증</h2>
                     </div>
-                    <div className="grid grid-cols-3 gap-4 mb-4">
+                    <div className="grid grid-cols-3 gap-4 mb-4 text-slate-900">
                       <select value={userData.grade} onChange={(e) => setUserData({...userData, grade: e.target.value})} className="p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-black text-center outline-none">
                         <option value="">학년</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
                       </select>
                       <input type="number" placeholder="반" value={userData.class} onChange={(e) => setUserData({...userData, class: e.target.value})} className="p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-black text-center outline-none" />
                       <input type="number" placeholder="번" value={userData.number} onChange={(e) => setUserData({...userData, number: e.target.value})} className="p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-black text-center outline-none" />
                     </div>
-                    <input type="text" placeholder="이름" value={userData.name} onChange={(e) => setUserData({...userData, name: e.target.value})} className="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl font-black text-xl px-8 mb-4 outline-none focus:border-blue-500" />
+                    <input type="text" placeholder="이름" value={userData.name} onChange={(e) => setUserData({...userData, name: e.target.value})} className="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl font-black text-xl px-8 mb-4 outline-none focus:border-blue-500 text-slate-900" />
                     <div className="relative mb-6">
                       <KeyRound className="absolute left-6 top-1/2 -translate-y-1/2 text-blue-400" size={20} />
-                      <input type="text" placeholder="인증 코드 입력" value={userData.authCode} onChange={(e) => setUserData({...userData, authCode: e.target.value})} className="w-full p-5 pl-16 bg-blue-50 border-2 border-blue-100 rounded-2xl font-black text-xl outline-none focus:border-blue-500" />
+                      <input type="text" placeholder="인증 코드 입력" value={userData.authCode} onChange={(e) => setUserData({...userData, authCode: e.target.value})} className="w-full p-5 pl-16 bg-blue-50 border-2 border-blue-100 rounded-2xl font-black text-xl outline-none focus:border-blue-500 text-slate-900" />
                     </div>
                     {error && <div className="p-4 bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 mb-6 flex items-center gap-2 text-sm font-black"><AlertCircle size={18} />{error}</div>}
                     <button disabled={!userData.grade || !userData.class || !userData.number || !userData.name || !userData.authCode || isVerifying} onClick={handleNextStep} className="w-full py-6 bg-blue-600 text-white rounded-3xl font-black text-xl shadow-xl transition-all active:scale-95">
@@ -412,7 +413,7 @@ export default function App() {
                     </button>
                   </>
                 ) : (
-                  <div className="text-center py-10">
+                  <div className="text-center py-10 text-slate-900">
                     {votingState === 'ready' ? (
                       <>
                         <Timer size={64} className="mx-auto text-amber-500 mb-6" />
@@ -432,7 +433,7 @@ export default function App() {
             )}
 
             {[2, 3, 4, 5].includes(step) && (
-              <div className="animate-in slide-in-from-right-8 duration-500">
+              <div className="animate-in slide-in-from-right-8 duration-500 text-slate-900">
                 <div className="flex justify-between items-end mb-8">
                   <h2 className="text-2xl font-black flex items-center gap-3 tracking-tight">
                     {step === 2 && <><Award className="text-amber-500" /> 전교회장 투표</>}
@@ -467,15 +468,24 @@ export default function App() {
             )}
 
             {step === 6 && (
-              <div className="bg-white rounded-[3rem] shadow-2xl p-10 border border-slate-100 animate-in zoom-in duration-500">
-                <h2 className="text-2xl font-black text-center mb-10 tracking-tight uppercase">최종 투표 내용 확인</h2>
-                <div className="space-y-4 mb-10 text-slate-900">
+              <div className="bg-white rounded-[3rem] shadow-2xl p-10 border border-slate-100 animate-in zoom-in duration-500 text-slate-900">
+                <h2 className="text-2xl font-black text-center mb-6 tracking-tight uppercase">최종 투표 내용 확인</h2>
+                
+                {/* 비밀 투표 안내 문구 추가 */}
+                <div className="bg-blue-50 p-5 rounded-2xl border border-blue-100 mb-8 flex items-start gap-3">
+                  <ShieldCheck size={24} className="text-blue-600 mt-0.5 shrink-0" />
+                  <p className="text-sm text-blue-900 font-bold leading-relaxed">
+                    본 투표는 <span className="underline decoration-2 underline-offset-2">비밀 투표</span>로 진행됩니다. 제출된 후에는 관리자를 포함한 그 누구도 투표 내용을 확인할 수 없으며, 데이터는 통계 수치로만 집계되니 안심하고 제출해 주세요.
+                  </p>
+                </div>
+
+                <div className="space-y-4 mb-10">
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 font-black text-center text-lg">{userData.grade}학년 {userData.class}반 {userData.number}번 {userData.name}</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="p-5 bg-amber-50 border border-amber-100 rounded-2xl font-black"><p className="text-[10px] text-amber-600 mb-1 uppercase tracking-widest font-black">전교회장</p>{selectedPres?.name}</div>
-                    <div className="p-5 bg-blue-50 border border-blue-100 rounded-2xl font-black"><p className="text-[10px] text-blue-600 mb-1 uppercase tracking-widest font-black">1학년 전교부회장</p>{selectedVP1?.name}</div>
-                    <div className="p-5 bg-indigo-50 border border-indigo-100 rounded-2xl font-black"><p className="text-[10px] text-indigo-600 mb-1 uppercase tracking-widest font-black">2학년 전교부회장</p>{selectedVP2?.name}</div>
-                    <div className="p-5 bg-purple-50 border border-purple-100 rounded-2xl font-black"><p className="text-[10px] text-purple-600 mb-1 uppercase tracking-widest font-black">3학년 전교부회장</p>{selectedVP3?.name}</div>
+                    <div className="p-5 bg-amber-50 border border-amber-100 rounded-2xl font-black text-slate-900"><p className="text-[10px] text-amber-600 mb-1 uppercase tracking-widest font-black">전교회장</p>{selectedPres?.name}</div>
+                    <div className="p-5 bg-blue-50 border border-blue-100 rounded-2xl font-black text-slate-900"><p className="text-[10px] text-blue-600 mb-1 uppercase tracking-widest font-black">1학년 전교부회장</p>{selectedVP1?.name}</div>
+                    <div className="p-5 bg-indigo-50 border border-indigo-100 rounded-2xl font-black text-slate-900"><p className="text-[10px] text-indigo-600 mb-1 uppercase tracking-widest font-black">2학년 전교부회장</p>{selectedVP2?.name}</div>
+                    <div className="p-5 bg-purple-50 border border-purple-100 rounded-2xl font-black text-slate-900"><p className="text-[10px] text-purple-600 mb-1 uppercase tracking-widest font-black">3학년 전교부회장</p>{selectedVP3?.name}</div>
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -486,7 +496,7 @@ export default function App() {
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-200 overflow-hidden relative animate-in slide-in-from-bottom-4 text-left">
+          <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-200 overflow-hidden relative animate-in slide-in-from-bottom-4 text-left text-slate-900">
               {/* 리셋 모달 */}
               {(resetConfirm || showResetAllModal) && (
                 <div className="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center text-white">
@@ -497,7 +507,7 @@ export default function App() {
                     <h4 className="text-xl font-black mb-2">{resetConfirm ? '개별 리셋' : '전체 초기화'}</h4>
                     <p className="text-sm text-slate-500 font-bold mb-6">{resetConfirm ? '해당 학생의 투표 데이터를 삭제하시겠습니까?' : '모든 투표 기록이 완전히 삭제됩니다.'}</p>
                     <div className="flex gap-3">
-                      <button onClick={() => {setResetConfirm(null); setShowResetAllModal(false);}} className="flex-1 py-3 bg-slate-100 rounded-xl font-bold">취소</button>
+                      <button onClick={() => {setResetConfirm(null); setShowResetAllModal(false);}} className="flex-1 py-3 bg-slate-100 rounded-xl font-bold text-slate-900">취소</button>
                       <button onClick={resetConfirm ? () => handleResetVoter(resetConfirm) : handleResetAllVotes} className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg">실행</button>
                     </div>
                   </div>
@@ -509,14 +519,13 @@ export default function App() {
               </div>
               {!isAdminAuthenticated ? (
                 <form onSubmit={handleAdminLogin} className="p-10 space-y-4">
-                  <input type="text" placeholder="ID" value={adminAuthForm.id} onChange={(e)=>setAdminAuthForm({...adminAuthForm, id: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold outline-none" />
-                  <input type="password" placeholder="Password" value={adminAuthForm.pw} onChange={(e)=>setAdminAuthForm({...adminAuthForm, pw: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold outline-none" />
+                  <input type="text" placeholder="ID" value={adminAuthForm.id} onChange={(e)=>setAdminAuthForm({...adminAuthForm, id: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold outline-none focus:border-blue-500 text-slate-900" />
+                  <input type="password" placeholder="Password" value={adminAuthForm.pw} onChange={(e)=>setAdminAuthForm({...adminAuthForm, pw: e.target.value})} className="w-full p-4 bg-slate-50 border border-slate-200 rounded-2xl font-bold outline-none focus:border-blue-500 text-slate-900" />
                   {adminAuthError && <p className="text-xs text-rose-500 font-black">{adminAuthError}</p>}
                   <button type="submit" className="w-full py-4 bg-blue-600 text-white rounded-2xl font-black text-lg">인증</button>
                 </form>
               ) : (
-                <div className="p-8 space-y-8 animate-in fade-in duration-500">
-                  {/* 투표 상태 제어 바 */}
+                <div className="p-8 space-y-8 animate-in fade-in duration-500 text-slate-900">
                   <div className="bg-slate-100 p-4 rounded-3xl flex flex-wrap items-center justify-center gap-4">
                     <button onClick={() => setGlobalVotingState('ready')} className={`px-5 py-2.5 rounded-2xl font-black text-xs flex items-center gap-2 transition-all ${votingState === 'ready' ? 'bg-amber-500 text-white shadow-lg' : 'bg-white text-slate-400'}`}><Timer size={16}/> 투표 준비</button>
                     <button onClick={() => setGlobalVotingState('active')} className={`px-5 py-2.5 rounded-2xl font-black text-xs flex items-center gap-2 transition-all ${votingState === 'active' ? 'bg-emerald-500 text-white shadow-lg' : 'bg-white text-slate-400'}`}><PlayCircle size={16}/> 투표 시작</button>
@@ -524,14 +533,14 @@ export default function App() {
                   </div>
 
                   <div className="flex bg-slate-100 p-1.5 rounded-2xl">
-                    <button onClick={()=>setAdminTab('stats')} className={`flex-1 py-3 rounded-xl font-black text-sm ${adminTab === 'stats' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500'}`}>집계</button>
-                    <button onClick={()=>setAdminTab('list')} className={`flex-1 py-3 rounded-xl font-black text-sm ${adminTab === 'list' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500'}`}>명단/보안</button>
+                    <button onClick={()=>setAdminTab('stats')} className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${adminTab === 'stats' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500'}`}>집계</button>
+                    <button onClick={()=>setAdminTab('list')} className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${adminTab === 'list' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500'}`}>명단/보안</button>
                   </div>
                   {adminTab === 'stats' ? (
                     <div className="space-y-10">
                       <div className="flex flex-wrap justify-between items-center gap-4">
-                        <p className="font-black text-slate-700 text-sm">전체 투표율: <span className="text-blue-600 text-xl">{((stats.total / totalStudentsList.length) * 100).toFixed(1)}%</span> ({stats.total}/{totalStudentsList.length}명)</p>
-                        <button onClick={() => setShowResetAllModal(true)} className="px-4 py-2 bg-rose-50 text-rose-600 border border-rose-100 rounded-xl text-xs font-black flex items-center gap-2 hover:bg-rose-100 transition-all"><Trash2 size={14}/> 전체 초기화</button>
+                        <p className="font-black text-slate-700 text-sm text-slate-900">전체 투표율: <span className="text-blue-600 text-xl">{((stats.total / totalStudentsList.length) * 100).toFixed(1)}%</span> ({stats.total}/{totalStudentsList.length}명)</p>
+                        <button onClick={() => setShowResetAllModal(true)} className="px-4 py-2 bg-rose-50 text-rose-600 border border-rose-100 rounded-xl text-xs font-black flex items-center gap-2 hover:bg-rose-100 transition-all text-slate-900"><Trash2 size={14}/> 전체 초기화</button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
                         {['pres', 'vp1', 'vp2', 'vp3'].map((key) => (
@@ -554,7 +563,7 @@ export default function App() {
                       </div>
                     </div>
                   ) : (
-                    <div className="space-y-6">
+                    <div className="space-y-6 text-slate-900">
                       <div className="bg-amber-50 p-6 rounded-2xl border border-amber-100">
                         <h4 className="font-black text-sm mb-2 flex items-center gap-2 text-amber-800"><ShieldAlert size={18}/> 보안 금고(DB) 동기화</h4>
                         <button onClick={syncAuthVault} disabled={isSyncing} className="w-full py-3 bg-amber-600 text-white rounded-xl font-black text-xs flex items-center justify-center gap-2 shadow-lg">
@@ -562,8 +571,8 @@ export default function App() {
                         </button>
                       </div>
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        <select onChange={(e)=>setFilterGrade(e.target.value)} className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold"><option value="all">학년</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
-                        <div className="relative col-span-3 text-slate-900"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="text" placeholder="검색" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} className="w-full p-3 pl-9 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold outline-none" /></div>
+                        <select onChange={(e)=>setFilterGrade(e.target.value)} className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold outline-none"><option value="all">학년</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select>
+                        <div className="relative col-span-3 text-slate-900"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="text" placeholder="검색" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} className="w-full p-3 pl-9 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold outline-none text-slate-900" /></div>
                       </div>
                       <div className="bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden max-h-[300px] overflow-y-auto">
                         <table className="w-full text-left text-[10px]">
@@ -593,7 +602,7 @@ export default function App() {
             <button onClick={() => setShowAdminPanel(true)} className="flex items-center gap-2 mx-auto text-slate-400 hover:text-blue-600 font-bold text-sm transition-colors uppercase tracking-[0.2em]"><BarChart3 size={16} /> Admin Mode</button>
           )}
         </div>
-        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em] text-slate-900">EMS Terminal V5.4 Final Control Build</footer>
+        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em] text-slate-900">EMS Terminal V5.5 Final Control Build</footer>
       </div>
     </div>
   );
