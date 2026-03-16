@@ -36,9 +36,9 @@ const db = getFirestore(app);
 const appId = "shinmyung-election-2026";
 
 // ==========================================
-// [보안 데이터] 849명 전교생 고유 인증 코드 (구문 오류 수정 완료)
+// [보안 데이터] 849명 전교생 고유 인증 코드
 // ==========================================
-const AUTH_CODES_DATA = {
+const AUTH_CODES_RAW = {
   "1101강은재": "8241", "1102권다은": "3192", "1103김나윤": "5674", "1104김미소": "1209", "1105김보민": "9932", "1106김서하": "4421", "1107김소정": "6712", "1108김수민": "2389", "1109김수윤": "7710", "1110김수현": "1543",
   "1111김시현": "3922", "1112김아란": "8841", "1113김주혜": "6620", "1114김지민": "2104", "1115김지현": "5539", "1116박연서": "9012", "1117박은서": "4328", "1118신수빈": "7611", "1119신유빈": "1298", "1120양서연": "3409",
   "1121윤가은": "5110", "1122윤예원": "6782", "1123음채율": "2245", "1124이서연": "9001", "1125이서은": "1123", "1126이정민": "4450", "1127이채은": "8762", "1128임서현": "3341", "1129조온규": "6092", "1130최다연": "1987",
@@ -100,7 +100,7 @@ const AUTH_CODES_DATA = {
   "3105김예담": "7784", "3106김이경": "4624", "3107김주연": "8983", "3108김주원": "1167", "3109김효림": "3515", "3110김효빈": "7844", "3111박서윤": "2297", "3112박세은": "9082", "3113박지윤": "6717", "3114박채영": "4384",
   "3115배드린": "8875", "3116손유": "5606", "3117손지우": "1261", "3118송슬": "7672", "3119유재서": "3484", "3120윤서윤": "9964", "3121윤혜린": "2195", "3122장하은": "6847", "3123전하늘": "1264", "3124조희진": "8297",
   "3125천영서": "4519", "3126천지민": "3412", "3127최민서": "9071", "3128최정윤": "1190", "3129최한나": "5734", "3130황정윤": "8828", "3201강현진": "2444", "3202곽예설": "4475", "3203김가온": "6682", "3204김민하": "8895",
-  "3205김예림": "1317", "3206김예서": "7804", "3207김지원": "3258", "3208김태영": "5745", "3209김하은": "1276", "3210남유민": "1004", "3211문예진": "4492", "3212박서윤": "6782", "3213박서진": "2454", "3214박수민": "7781",
+  "3205김예림": "1317", "3206김예서": "7804", "3207지원": "3258", "3208김태영": "5745", "3209김하은": "1276", "3210남유민": "1004", "3211문예진": "4492", "3212박서윤": "6782", "3213박서진": "2454", "3214박수민": "7781",
   "3215박채연": "1612", "3216설하영": "3992", "3217예도연": "8911", "3218우승은": "6690", "3219이세은": "2174", "3220이유주": "5608", "3221이하정": "9082", "3222임서영": "4397", "3223정규현": "7681", "3224정다인": "1368",
   "3225정서영": "3479", "3226최가은": "5180", "3227최다연": "6852", "3228최리아": "2315", "3229최지우": "9071", "3230최희윤": "1193", "3301강현서": "4520", "3302권아연": "8832", "3303김민유": "3411", "3304김보미": "6162",
   "3305김서영": "2057", "3306김소윤": "7791", "3307김소은": "4631", "3308김예지": "8990", "3309김지율": "1174", "3310김현서": "3522", "3311남승연": "7851", "3312박새봄": "2304", "3313박지후": "9089", "3314박채은": "6724",
@@ -126,6 +126,15 @@ const AUTH_CODES_DATA = {
   "3919이가윤": "3512", "3920이시윤": "9992", "3921이은교": "2223", "3922이채윤": "6875", "3923이한비": "1292", "3924전하늘": "8325", "3925정여원": "4547", "3926조민영": "3440", "3927지예안": "9099", "3928최은교": "1218",
   "3929허윤서": "5762", "3930황서영": "8856"
 };
+
+// 학생별 고유 코드 데이터 정제
+const FINAL_AUTH_CODES = {};
+Object.entries(AUTH_CODES_RAW).forEach(([key, val]) => {
+  const cleanKey = key.replace(/\|/g, "").replace(/\s/g, "");
+  const match = cleanKey.match(/(\d{4})(.+)/);
+  if (match) { FINAL_AUTH_CODES[match[1] + match[2]] = val.replace(/\*/g, "").trim(); }
+  else { FINAL_AUTH_CODES[cleanKey] = val.replace(/\*/g, "").trim(); }
+});
 
 const candidates = {
   president: [
@@ -191,7 +200,7 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const totalStudentsList = useMemo(() => {
-    return Object.keys(AUTH_CODES_DATA).map(key => ({
+    return Object.keys(FINAL_AUTH_CODES).map(key => ({
       key, grade: key[0], class: key[1], number: key.substring(2, 4), name: key.substring(4)
     }));
   }, []);
@@ -205,18 +214,22 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
+  // 최적화: 관리자 모드일 때만 실시간 리스너 작동
   useEffect(() => {
-    if (!user) return;
+    if (!user || !isAdminAuthenticated) return;
+    
     const votesRef = collection(db, 'artifacts', appId, 'public', 'data', 'votes');
     const unsubVotes = onSnapshot(votesRef, (snapshot) => { setDbVotes(snapshot.docs.map(doc => doc.data())); });
+    
     const votersRef = collection(db, 'artifacts', appId, 'public', 'data', 'voters');
     const unsubVoters = onSnapshot(votersRef, (snapshot) => {
       const votersMap = {};
       snapshot.docs.forEach(doc => { votersMap[doc.id] = true; });
       setDbVoters(votersMap);
     });
+    
     return () => { unsubVotes(); unsubVoters(); };
-  }, [user]);
+  }, [user, isAdminAuthenticated]);
 
   const verifyStudent = async () => {
     setIsVerifying(true);
@@ -224,12 +237,12 @@ export default function App() {
     const formattedNumber = number.toString().padStart(2, '0');
     const userKey = `${grade}${cls}${formattedNumber}${name}`;
     
-    if (!AUTH_CODES_DATA[userKey]) {
+    if (!FINAL_AUTH_CODES[userKey]) {
       setError('명단에 없는 학생입니다.');
       setIsVerifying(false);
       return false;
     }
-    if (AUTH_CODES_DATA[userKey] !== authCode.trim()) {
+    if (FINAL_AUTH_CODES[userKey] !== authCode.trim()) {
       setError('인증 코드가 일치하지 않습니다.');
       setIsVerifying(false);
       return false;
@@ -339,10 +352,10 @@ export default function App() {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 text-slate-900">
         <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-slate-100">
           <CheckCircle size={80} className="text-emerald-500 mx-auto mb-6" />
-          <h2 className="text-3xl font-black mb-4 tracking-tight text-slate-900">투표 제출 완료</h2>
+          <h2 className="text-3xl font-black mb-4 tracking-tight">투표 제출 완료</h2>
           <p className="text-slate-600 mb-8 font-medium">참여해 주셔서 감사합니다.</p>
           <button onClick={() => window.location.reload()} className="w-full py-5 bg-slate-900 text-white rounded-2xl font-black transition-all active:scale-95">닫기</button>
         </div>
@@ -353,12 +366,11 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center py-12 px-4 font-sans text-slate-900 selection:bg-blue-100">
       <div className="max-w-3xl w-full">
-        {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full mb-4 uppercase tracking-[0.2em] shadow-lg">
-            <Lock size={12} /> SECURED SYSTEM V5.1
+            <Lock size={12} /> SECURED SYSTEM V5.2
           </div>
-          <h1 className="text-4xl font-black mb-2 tracking-tighter text-slate-900">2026학년도 신명여자중학교 전교 회장단 선거</h1>
+          <h1 className="text-4xl font-black mb-2 tracking-tighter">2026학년도 신명여자중학교 전교 회장단 선거</h1>
         </div>
 
         {!showAdminPanel ? (
@@ -367,7 +379,7 @@ export default function App() {
               <div className="bg-white rounded-[2.5rem] shadow-2xl p-10 border border-slate-100 animate-in slide-in-from-bottom-4 duration-500">
                 <div className="flex items-center gap-4 mb-10">
                   <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl shadow-inner"><Fingerprint size={28} strokeWidth={2.5} /></div>
-                  <h2 className="text-2xl font-black text-slate-900">본인 확인 및 인증</h2>
+                  <h2 className="text-2xl font-black">본인 확인 및 인증</h2>
                 </div>
                 <div className="grid grid-cols-3 gap-4 mb-4">
                   <select value={userData.grade} onChange={(e) => setUserData({...userData, grade: e.target.value})} className="p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-black text-center outline-none">
@@ -381,7 +393,7 @@ export default function App() {
                   <KeyRound className="absolute left-6 top-1/2 -translate-y-1/2 text-blue-400" size={20} />
                   <input type="text" placeholder="인증 코드 입력" value={userData.authCode} onChange={(e) => setUserData({...userData, authCode: e.target.value})} className="w-full p-5 pl-16 bg-blue-50 border-2 border-blue-100 rounded-2xl font-black text-xl outline-none focus:border-blue-500" />
                 </div>
-                {error && <div className="p-4 bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 mb-6 flex items-center gap-2 text-sm font-black"><AlertCircle size={18} />{error}</div>}
+                {error && <div className="p-4 bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 mb-6 flex items-center gap-2 text-sm font-black animate-in shake"><AlertCircle size={18} />{error}</div>}
                 <button disabled={!userData.grade || !userData.class || !userData.number || !userData.name || !userData.authCode || isVerifying} onClick={handleNextStep} className="w-full py-6 bg-blue-600 text-white rounded-3xl font-black text-xl shadow-xl transition-all active:scale-95">
                   {isVerifying ? <RefreshCw className="animate-spin mx-auto" /> : '인증 확인 및 투표 시작'}
                 </button>
@@ -391,7 +403,7 @@ export default function App() {
             {[2, 3, 4, 5].includes(step) && (
               <div className="animate-in slide-in-from-right-8 duration-500">
                 <div className="flex justify-between items-end mb-8">
-                  <h2 className="text-2xl font-black flex items-center gap-3 tracking-tight text-slate-900">
+                  <h2 className="text-2xl font-black flex items-center gap-3 tracking-tight">
                     {step === 2 && <><Award className="text-amber-500" /> 전교회장 투표</>}
                     {step === 3 && <><Users className="text-blue-500" /> 1학년 전교부회장 투표</>}
                     {step === 4 && <><Users className="text-indigo-500" /> 2학년 전교부회장 투표</>}
@@ -408,7 +420,7 @@ export default function App() {
                       }} className={`p-6 bg-white rounded-[1.5rem] border-4 cursor-pointer transition-all flex justify-between items-center ${isSelected ? 'border-blue-600 bg-blue-50 shadow-lg scale-[1.01]' : 'border-white hover:border-slate-100'}`}>
                         <div>
                           <span className="text-[10px] font-black bg-slate-100 px-3 py-1 rounded-lg uppercase tracking-wider">기호 {c.id % 100}번</span>
-                          <h3 className="text-xl font-black mt-2 text-slate-900">{c.name}</h3>
+                          <h3 className="text-xl font-black mt-2">{c.name}</h3>
                           <p className="text-slate-500 font-bold text-sm italic">"{c.slogan}"</p>
                         </div>
                         <CheckCircle size={28} className={isSelected ? 'text-blue-600' : 'text-slate-100'} />
@@ -425,7 +437,7 @@ export default function App() {
 
             {step === 6 && (
               <div className="bg-white rounded-[3rem] shadow-2xl p-10 border border-slate-100 animate-in zoom-in duration-500">
-                <h2 className="text-2xl font-black text-center mb-10 tracking-tight uppercase text-slate-900">최종 투표 내용 확인</h2>
+                <h2 className="text-2xl font-black text-center mb-10 tracking-tight uppercase">최종 투표 내용 확인</h2>
                 <div className="space-y-4 mb-10">
                   <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 font-black text-center text-lg">{userData.grade}학년 {userData.class}반 {userData.number}번 {userData.name}</div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -445,10 +457,10 @@ export default function App() {
         ) : (
           <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-200 overflow-hidden relative animate-in slide-in-from-bottom-4 text-left">
               {resetConfirm && (
-                <div className="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center">
-                  <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in">
+                <div className="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center text-white">
+                  <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in text-slate-900">
                     <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4"><RotateCcw size={32} /></div>
-                    <h4 className="text-xl font-black mb-2 text-slate-900">개별 리셋</h4>
+                    <h4 className="text-xl font-black mb-2">개별 리셋</h4>
                     <p className="text-sm text-slate-500 font-bold mb-6 tracking-tight">해당 학생의 투표 데이터를 삭제하시겠습니까?</p>
                     <div className="flex gap-3">
                       <button onClick={() => setResetConfirm(null)} className="flex-1 py-3 bg-slate-100 rounded-xl font-bold">취소</button>
@@ -458,10 +470,10 @@ export default function App() {
                 </div>
               )}
               {showResetAllModal && (
-                <div className="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center">
-                  <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in">
+                <div className="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center text-white">
+                  <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in text-slate-900">
                     <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4"><AlertTriangle size={32} /></div>
-                    <h4 className="text-xl font-black mb-2 text-slate-900">전체 초기화</h4>
+                    <h4 className="text-xl font-black mb-2">전체 데이터 초기화</h4>
                     <p className="text-sm text-rose-500 font-black mb-6">모든 학생의 투표 기록과 득표 결과가 완전히 삭제됩니다.</p>
                     <div className="flex gap-3">
                       <button onClick={() => setShowResetAllModal(false)} className="flex-1 py-3 bg-slate-100 rounded-xl font-bold">취소</button>
@@ -474,7 +486,7 @@ export default function App() {
               )}
               <div className="bg-slate-900 p-8 text-white flex justify-between items-center">
                 <h3 className="text-xl font-black flex items-center gap-3"><ShieldCheck className="text-emerald-400" /> {isAdminAuthenticated ? '관리 대시보드' : '보안 인증'}</h3>
-                <button onClick={() => {setShowAdminPanel(false); setIsAdminAuthenticated(false);}} className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-all"><X size={18}/></button>
+                <button onClick={() => {setShowAdminPanel(false); setIsAdminAuthenticated(false);}} className="p-2 bg-white/10 rounded-full hover:bg-white/20"><X size={18}/></button>
               </div>
               {!isAdminAuthenticated ? (
                 <form onSubmit={handleAdminLogin} className="p-10 space-y-4">
@@ -496,7 +508,6 @@ export default function App() {
                         <button onClick={() => setShowResetAllModal(true)} className="px-4 py-2 bg-rose-50 text-rose-600 border border-rose-100 rounded-xl text-xs font-black flex items-center gap-2 hover:bg-rose-100 transition-all"><Trash2 size={14}/> 전체 초기화</button>
                       </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
-                        {/* 회장 집계 */}
                         <div className="space-y-4">
                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">전교회장</p>
                           {candidates.president.map(p => {
@@ -510,7 +521,6 @@ export default function App() {
                             );
                           })}
                         </div>
-                        {/* 1학년 부회장 */}
                         <div className="space-y-4">
                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">1학년 전교부회장</p>
                           {candidates.vp1.map(p => {
@@ -524,7 +534,6 @@ export default function App() {
                             );
                           })}
                         </div>
-                        {/* 2학년 부회장 */}
                         <div className="space-y-4">
                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">2학년 전교부회장</p>
                           {candidates.vp2.map(p => {
@@ -538,7 +547,6 @@ export default function App() {
                             );
                           })}
                         </div>
-                        {/* 3학년 부회장 */}
                         <div className="space-y-4">
                           <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">3학년 전교부회장</p>
                           {candidates.vp3.map(p => {
@@ -590,7 +598,7 @@ export default function App() {
             <button onClick={() => setShowAdminPanel(true)} className="flex items-center gap-2 mx-auto text-slate-400 hover:text-blue-600 font-bold text-sm transition-colors uppercase tracking-[0.2em]"><BarChart3 size={16} /> Admin Mode</button>
           )}
         </div>
-        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em]">EMS Terminal V5.1 Secure Build</footer>
+        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em]">EMS Terminal V5.2 Secure Build</footer>
       </div>
     </div>
   );
