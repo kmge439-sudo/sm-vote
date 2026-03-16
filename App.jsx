@@ -17,10 +17,10 @@ import {
   onAuthStateChanged
 } from 'firebase/auth';
 import { 
-  User, CheckCircle, Award, Users, AlertCircle, Lock, BarChart3, RefreshCw, KeyRound, ShieldCheck, X, Search, RotateCcw, Trash2, AlertTriangle, Fingerprint
+  User, CheckCircle, Award, Users, AlertCircle, Lock, BarChart3, RefreshCw, KeyRound, ShieldCheck, X, Search, RotateCcw, Trash2, AlertTriangle, Fingerprint, ChevronRight, ChevronLeft
 } from 'lucide-react';
 
-// --- [유지] 사용자님의 실제 Firebase 최신 설정값 ---
+// --- [Firebase 설정] 사용자님의 실제 최신 설정값 적용 ---
 const firebaseConfig = {
   apiKey: "AIzaSyCOcU2Fopwe07oHRfANGV_zD-D9rY7IQXw",
   authDomain: "st-shinmyung-5e261.firebaseapp.com",
@@ -30,17 +30,15 @@ const firebaseConfig = {
   appId: "1:974553161620:web:0f9ca261bcc887e1173981"
 };
 
-// Firebase 초기화
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 const appId = "shinmyung-election-2026";
 
 // ==========================================
-// [보안 업데이트] 849명 전교생 고유 인증 코드 데이터
-// Canvas의 명단과 100% 일치합니다.
+// [보안 데이터] 849명 전교생 고유 인증 코드 (구문 오류 수정 완료)
 // ==========================================
-const AUTH_CODES = {
+const AUTH_CODES_DATA = {
   "1101강은재": "8241", "1102권다은": "3192", "1103김나윤": "5674", "1104김미소": "1209", "1105김보민": "9932", "1106김서하": "4421", "1107김소정": "6712", "1108김수민": "2389", "1109김수윤": "7710", "1110김수현": "1543",
   "1111김시현": "3922", "1112김아란": "8841", "1113김주혜": "6620", "1114김지민": "2104", "1115김지현": "5539", "1116박연서": "9012", "1117박은서": "4328", "1118신수빈": "7611", "1119신유빈": "1298", "1120양서연": "3409",
   "1121윤가은": "5110", "1122윤예원": "6782", "1123음채율": "2245", "1124이서연": "9001", "1125이서은": "1123", "1126이정민": "4450", "1127이채은": "8762", "1128임서현": "3341", "1129조온규": "6092", "1130최다연": "1987",
@@ -97,12 +95,12 @@ const AUTH_CODES = {
   "2821이채은": "5599", "2822이하은": "1254", "2823전지현": "7665", "2824전현서": "3477", "2825정윤지": "9957", "2826조서연": "2188", "2827지송은": "6840", "2828진은서": "1257", "2829최유란": "8290", "2830최윤서": "4512",
   "2831하지원": "3405", "2832허수진": "9064", "2833황서윤": "1183", "2901강소율": "5727", "2902김가은": "8821", "2903김나윤": "2437", "2904김나현": "4468", "2905김서연": "6675", "2906김수영": "8888", "2907김은우": "1310",
   "2908김인하": "7797", "2909김하은": "3251", "2910도예서": "5738", "2911도유빈": "1269", "2912도윤슬": "9997", "2913박민서": "4485", "2914박선영": "6775", "2915박소이": "2447", "2916박수빈": "7774", "2917박윤서": "1605",
-  "2918백서현": "3985", "2919손지민": "8904", "2920송현지": "6683", "2921심윤서": "2167", "2922안민슬": "5601", "2923음채우": "9075", "2924이다은": "4390", "2925이수연": "7674", "2926이연우": "1361", "2927이예진": "3472",
+  "2918백서현": "3985", "2919손지민": "8904", "2920송현지": "6683", "2921김민서": "2167", "2922안민슬": "5601", "2923음채우": "9075", "2924이다은": "4390", "2925이수연": "7674", "2926이연우": "1361", "2927이예진": "3472",
   "2928이윤진": "5173", "2929장채윤": "6845", "2930전이진": "2308", "2931정다연": "9064", "2932정려원": "1186", "2933정하린": "4513", "3101김가령": "8825", "3102김수연": "3404", "3103김승은": "6155", "3104김시현": "2050",
   "3105김예담": "7784", "3106김이경": "4624", "3107김주연": "8983", "3108김주원": "1167", "3109김효림": "3515", "3110김효빈": "7844", "3111박서윤": "2297", "3112박세은": "9082", "3113박지윤": "6717", "3114박채영": "4384",
   "3115배드린": "8875", "3116손유": "5606", "3117손지우": "1261", "3118송슬": "7672", "3119유재서": "3484", "3120윤서윤": "9964", "3121윤혜린": "2195", "3122장하은": "6847", "3123전하늘": "1264", "3124조희진": "8297",
   "3125천영서": "4519", "3126천지민": "3412", "3127최민서": "9071", "3128최정윤": "1190", "3129최한나": "5734", "3130황정윤": "8828", "3201강현진": "2444", "3202곽예설": "4475", "3203김가온": "6682", "3204김민하": "8895",
-  "3205김예림": "1317", "3206김예서": "7804", "3207지원": "3258", "3208김태영": "5745", "3209김하은": "1276", "3210남유민": "1004", "3211문예진": "4492", "3212박서윤": "6782", "3213박서진": "2454", "3214박수민": "7781",
+  "3205김예림": "1317", "3206김예서": "7804", "3207김지원": "3258", "3208김태영": "5745", "3209김하은": "1276", "3210남유민": "1004", "3211문예진": "4492", "3212박서윤": "6782", "3213박서진": "2454", "3214박수민": "7781",
   "3215박채연": "1612", "3216설하영": "3992", "3217예도연": "8911", "3218우승은": "6690", "3219이세은": "2174", "3220이유주": "5608", "3221이하정": "9082", "3222임서영": "4397", "3223정규현": "7681", "3224정다인": "1368",
   "3225정서영": "3479", "3226최가은": "5180", "3227최다연": "6852", "3228최리아": "2315", "3229최지우": "9071", "3230최희윤": "1193", "3301강현서": "4520", "3302권아연": "8832", "3303김민유": "3411", "3304김보미": "6162",
   "3305김서영": "2057", "3306김소윤": "7791", "3307김소은": "4631", "3308김예지": "8990", "3309김지율": "1174", "3310김현서": "3522", "3311남승연": "7851", "3312박새봄": "2304", "3313박지후": "9089", "3314박채은": "6724",
@@ -113,33 +111,69 @@ const AUTH_CODES = {
   "3425정해원": "1375", "3426최효리": "3486", "3427최휘진": "5187", "3428현다연": "6859", "3429홍도영": "2322", "3430황서영": "9078", "3431황서휘": "1200", "3501권가람": "4527", "3502권도연": "8839", "3503김사랑": "3418",
   "3504김수정": "6169", "3505김유진": "2064", "3506김은서": "7798", "3507김현주": "4638", "3508손서윤": "8997", "3509송지은": "1181", "3510송채윤": "3529", "3511신다솜": "7858", "3512신예원": "2311", "3513양소윤": "9096",
   "3514우정민": "6731", "3515유수민": "4398", "3516이비안": "8889", "3517이서진": "5620", "3518이유진": "1275", "3519이윤서": "7686", "3520이지안": "3498", "3521이채은": "9978", "3522이현서": "2209", "3523전지율": "6861",
-  "3524정다은": "1278", "3525정유림": "8311", "3526정은교": "4533", "3527진효림": "3426", "3528최연우": "9085", "3529최희재": "1204", "3530하지우": "5748", "3531황봄": "8842", "3601김경민": "2458", "3602김고은": "4489",
-  "3603김기란": "6696", "3604김미령": "8909", "3605김사랑": "1331", "3606김소연": "7818", "3607김소윤": "3272", "3608김예린": "5759", "3609김지우": "1290", "3610문서영": "1018", "3611박지성": "4506", "3612박나연": "6796",
-  "3613백인경": "2468", "3614서지우": "7795", "3615서혜정": "1626", "3616송주연": "4006", "3617신효주": "8925", "3618윤선진": "6704", "3619윤수아": "2188", "3620윤진서": "5622", "3621이선주": "9096", "3622이수안": "4411",
-  "3623이지우": "7695", "3624임주비": "1382", "3625임하윤": "3493", "3626전소이": "5194", "3627전지윤": "6866", "3628정지민": "2329", "3629천사론": "9085", "3630한서윤": "1207", "3631황혜린": "4534", "3701강연우": "8846",
-  "3702곽은빈": "3425", "3703김가을": "6176", "3704김란희": "2071", "3705김영아": "7805", "3706김채윤": "4645", "3707김효린": "9004", "3708박다은": "1188", "3709박민서": "3536", "3710박보민": "7865", "3711박서윤": "2318",
-  "3712박현서": "9103", "3713변서현": "6738", "3714신서영": "4398", "3715여효이": "8896", "3716오채원": "5627", "3717이라은": "1282", "3718이서연": "7693", "3719이시원": "3505", "3720이예은": "9985", "3721이제아": "2216",
-  "3722이현진": "6868", "3723이효주": "1285", "3724정다민": "8318", "3725정은희": "4540", "3726조시연": "3433", "3727천예현": "9092", "3728최유리": "1211", "3729최재원": "5755", "3730하루아": "8849", "3731허다령": "2465",
-  "3801권경민": "4496", "3802권예린": "6703", "3803김수혜": "8916", "3804김윤아": "1338", "3805김지인": "7825", "3806김한결": "3279", "3807박채원": "5766", "3808배해인": "1297", "3809서지우": "1025", "3810양예지": "4513",
-  "3811이나경": "6803", "3812이다인": "2475", "3813이세은": "7802", "3814이승은": "1633", "3815이지윤": "4013", "3816이채은": "8932", "3817이효원": "6711", "3818임소현": "2195", "3819전민지": "5629", "3820정민주": "9103",
-  "3821조다혜": "4418", "3822지수현": "7702", "3823차승연": "1389", "3824천원정": "3500", "3825최아영": "5201", "3826최유나": "6873", "3827최윤화": "2336", "3828하민서": "9092", "3829홍승아": "1214", "3830황수현": "4541",
-  "3901권윤솔": "8853", "3902김미담": "3432", "3903김민지": "6183", "3904김민채": "2078", "3905김수아": "7812", "3906김유진": "4652", "3907김정현": "9011", "3908김지아": "1195", "3909남민지": "3543", "3910박선우": "7872",
-  "3911박지현": "2325", "3912백민주": "9110", "3913빈다은": "6745", "3914손주연": "4405", "3915손현재": "8903", "3916신그린": "5634", "3917오은채": "1289", "3918윤소원": "7700", "3919이가윤": "3512", "3920이시윤": "9992",
-  "3921이은교": "2223", "3922이채윤": "6875", "3923이한비": "1292", "3924전하늘": "8325", "3925정여원": "4547", "3926조민영": "3440", "3927지예안": "9099", "3928최은교": "1218", "3929허윤서": "5762", "3930황서영": "8856"
+  "3524정다은": "1278", "3525정유림": "8311", "3526정은교": "4533", "3527진효림": "3426", "3528최연우": "9085", "3529최희재": "1204", "3530하지우": "5748", "3531황봄": "8842",
+  "3601김경민": "2458", "3602김고은": "4489", "3603김기란": "6696", "3604김미령": "8909", "3605김사랑": "1331", "3606김소연": "7818", "3607김소윤": "3272", "3608김예린": "5759", "3609김지우": "1290", "3610문서영": "1018",
+  "3611박지성": "4506", "3612박나연": "6796", "3613백인경": "2468", "3614서지우": "7795", "3615서혜정": "1626", "3616송주연": "4006", "3617신효주": "8925", "3618윤선진": "6704", "3619윤수아": "2188", "3620윤진서": "5622",
+  "3621이선주": "9096", "3622이수안": "4411", "3623이지우": "7695", "3624임주비": "1382", "3625임하윤": "3493", "3626전소이": "5194", "3627전지윤": "6866", "3628정지민": "2329", "3629천사론": "9085", "3630한서윤": "1207",
+  "3631황혜린": "4534", "3701강연우": "8846", "3702곽은빈": "3425", "3703김가을": "6176", "3704김란희": "2071", "3705김영아": "7805", "3706김채윤": "4645", "3707김효린": "9004", "3708박다은": "1188", "3709박민서": "3536",
+  "3710박보민": "7865", "3711박서윤": "2318", "3712박현서": "9103", "3713변서현": "6738", "3714신서영": "4398", "3715여효이": "8896", "3716오채원": "5627", "3717이라은": "1282", "3718이서연": "7693", "3719이시원": "3505",
+  "3720이예은": "9985", "3721이제아": "2216", "3722이현진": "6868", "3723이효주": "1285", "3724정다민": "8318", "3725정은희": "4540", "3726조시연": "3433", "3727천예현": "9092", "3728최유리": "1211", "3729최재원": "5755",
+  "3730하루아": "8849", "3731허다령": "2465", "3801권경민": "4496", "3802권예린": "6703", "3803김수혜": "8916", "3804김윤아": "1338", "3805김지인": "7825", "3806김한결": "3279", "3807박채원": "5766", "3808배해인": "1297",
+  "3809서지우": "1025", "3810양예지": "4513", "3811이나경": "6803", "3812이다인": "2475", "3813이세은": "7802", "3814이승은": "1633", "3815이지윤": "4013", "3816이채은": "8932", "3817이효원": "6711", "3818임소현": "2195",
+  "3819전민지": "5629", "3820정민주": "9103", "3821조다혜": "4418", "3822지수현": "7702", "3823차승연": "1389", "3824천원정": "3500", "3825최아영": "5201", "3826최유나": "6873", "3827최윤화": "2336", "3828하민서": "9092",
+  "3829홍승아": "1214", "3830황수현": "4541", "3901권윤솔": "8853", "3902김미담": "3432", "3903김민지": "6183", "3904김민채": "2078", "3905김수아": "7812", "3906김유진": "4652", "3907김정현": "9011", "3908김지아": "1195",
+  "3909남민지": "3543", "3910박선우": "7872", "3911박지현": "2325", "3912백민주": "9110", "3913빈다은": "6745", "3914손주연": "4405", "3915손현재": "8903", "3916신그린": "5634", "3917오은채": "1289", "3918윤소원": "7700",
+  "3919이가윤": "3512", "3920이시윤": "9992", "3921이은교": "2223", "3922이채윤": "6875", "3923이한비": "1292", "3924전하늘": "8325", "3925정여원": "4547", "3926조민영": "3440", "3927지예안": "9099", "3928최은교": "1218",
+  "3929허윤서": "5762", "3930황서영": "8856"
+};
+
+const candidates = {
+  president: [
+    { id: 1, name: '황수현', slogan: '3학년 8반의 열정으로 학교를 빛내겠습니다!' },
+    { id: 2, name: '김병진', slogan: '3학년 6반의 리더십, 신명의 변화를 약속합니다.' },
+    { id: 3, name: '김재수', slogan: '3학년 7반의 성실함으로 모두가 행복한 학교!' },
+    { id: 4, name: '박재두', slogan: '3학년 9반의 패기, 소통하는 회장이 되겠습니다.' },
+    { id: 5, name: '손희동', slogan: '3학년 7반의 진심, 발로 뛰는 일꾼이 되겠습니다.' },
+    { id: 6, name: '김민혜', slogan: '3학년 4반의 따뜻함, 학생들의 목소리를 듣겠습니다.' }
+  ],
+  vp1: [
+    { id: 101, name: '황수현', slogan: '1학년을 위한 든든한 목소리가 되겠습니다.' },
+    { id: 102, name: '김병진', slogan: '행동으로 보여주는 1학년의 대변인!' },
+    { id: 103, name: '김재수', slogan: '우리의 꿈을 함께 키워나갈 부회장.' },
+    { id: 104, name: '박재두', slogan: '즐거운 학교 생활, 제가 책임지겠습니다.' },
+    { id: 105, name: '손희동', slogan: '언제나 곁에 있는 1학년의 친구.' },
+    { id: 106, name: '김민혜', slogan: '작은 불편함도 놓치지 않겠습니다.' }
+  ],
+  vp2: [
+    { id: 201, name: '황수현', slogan: '2학년의 자부심, 실천하는 리더!' },
+    { id: 202, name: '김병진', slogan: '우리 학년의 문제를 앞장서서 해결합니다.' },
+    { id: 203, name: '김재수', slogan: '더 나은 2학년을 위한 확실한 선택.' },
+    { id: 204, name: '박재두', slogan: '소통과 공감으로 하나 되는 2학년!' },
+    { id: 205, name: '손희동', slogan: '투명하고 정직한 학생회를 약속합니다.' },
+    { id: 206, name: '김민혜', slogan: '모두가 주인공인 2학년을 만듭니다.' }
+  ],
+  vp3: [
+    { id: 301, name: '황수현', slogan: '3학년의 마지막을 화려하게 장식하겠습니다!' },
+    { id: 302, name: '김병진', slogan: '졸업 전 최고의 추억을 선물할 부회장.' },
+    { id: 303, name: '김재수', slogan: '후배들의 본보기가 되는 3학년 리더!' },
+    { id: 304, name: '박재두', slogan: '우리의 목소리를 학교에 전하겠습니다.' },
+    { id: 305, name: '손희동', slogan: '믿음직한 맏언니 같은 부회장.' },
+    { id: 306, name: '김민혜', slogan: '공부도 활동도 즐거운 3학년 생활!' }
+  ]
 };
 
 export default function App() {
-  // --- 상태 관리 ---
   const [user, setUser] = useState(null);
   const [step, setStep] = useState(1);
   const [userData, setUserData] = useState({ grade: '', class: '', number: '', name: '', authCode: '' });
   const [error, setError] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
-  const [selectedPresident, setSelectedPresident] = useState(null);
-  const [selectedVicePresident, setSelectedVicePresident] = useState(null);
+  const [selectedPres, setSelectedPres] = useState(null);
+  const [selectedVP1, setSelectedVP1] = useState(null);
+  const [selectedVP2, setSelectedVP2] = useState(null);
+  const [selectedVP3, setSelectedVP3] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   
-  // --- 관리자 모드 상태 ---
   const [showAdminPanel, setShowAdminPanel] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [adminAuthForm, setAdminAuthForm] = useState({ id: '', pw: '' });
@@ -157,40 +191,14 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
 
   const totalStudentsList = useMemo(() => {
-    const students = [];
-    Object.keys(AUTH_CODES).forEach(key => {
-      students.push({
-        key: key,
-        grade: key[0],
-        class: key[1],
-        number: key.substring(2, 4),
-        name: key.substring(4)
-      });
-    });
-    return students;
+    return Object.keys(AUTH_CODES_DATA).map(key => ({
+      key, grade: key[0], class: key[1], number: key.substring(2, 4), name: key.substring(4)
+    }));
   }, []);
-
-  const presidents = [
-    { id: 1, name: '황수현', slogan: '3학년 8반의 열정으로 학교를 빛내겠습니다!' },
-    { id: 2, name: '김병진', slogan: '3학년 6반의 리더십, 신명의 변화를 약속합니다.' },
-    { id: 3, name: '김재수', slogan: '3학년 7반의 성실함으로 모두가 행복한 학교!' },
-    { id: 4, name: '박재두', slogan: '3학년 9반의 패기, 소통하는 회장이 되겠습니다.' },
-    { id: 5, name: '손희동', slogan: '3학년 7반의 진심, 발로 뛰는 일꾼이 되겠습니다.' },
-    { id: 6, name: '김민혜', slogan: '3학년 4반의 따뜻함, 학생들의 목소리를 듣겠습니다.' }
-  ];
-
-  const vicePresidents = [
-    { id: 101, name: '황수현', slogan: '3학년 8반의 든든한 부회장이 되겠습니다!' },
-    { id: 102, name: '김병진', slogan: '3학년 6반의 실천력, 행동으로 보여드리겠습니다.' },
-    { id: 103, name: '김재수', slogan: '3학년 7반의 공감 능력, 여러분 곁에 있겠습니다.' },
-    { id: 104, name: '박재두', slogan: '3학년 9반의 열정, 학생회를 새롭게 바꾸겠습니다.' },
-    { id: 105, name: '손희동', slogan: '3학년 7반의 정직함, 믿음직한 부회장이 되겠습니다.' },
-    { id: 106, name: '김민혜', slogan: '3학년 4반의 배려, 함께 웃는 학교를 만듭니다.' }
-  ];
 
   useEffect(() => {
     const initAuth = async () => {
-      try { await signInAnonymously(auth); } catch (err) { console.warn("인증 지연:", err.message); }
+      try { await signInAnonymously(auth); } catch (err) { console.warn(err.message); }
     };
     initAuth();
     const unsubscribe = onAuthStateChanged(auth, setUser);
@@ -216,28 +224,25 @@ export default function App() {
     const formattedNumber = number.toString().padStart(2, '0');
     const userKey = `${grade}${cls}${formattedNumber}${name}`;
     
-    if (!AUTH_CODES[userKey]) {
-      setError('명단에 없는 학생입니다. 정보를 다시 확인하세요.');
+    if (!AUTH_CODES_DATA[userKey]) {
+      setError('명단에 없는 학생입니다.');
       setIsVerifying(false);
       return false;
     }
-
-    if (AUTH_CODES[userKey] !== authCode) {
-      setError('인증 코드가 일치하지 않습니다. 본인의 고유 코드를 입력하세요.');
+    if (AUTH_CODES_DATA[userKey] !== authCode.trim()) {
+      setError('인증 코드가 일치하지 않습니다.');
       setIsVerifying(false);
       return false;
     }
-
     if (!user) {
-       setError('서버 연결 중... 잠시 후 다시 시도해 주세요.');
+       setError('서버 연결 중...');
        setIsVerifying(false);
        return false;
     }
-
     try {
       const voterDoc = await getDoc(doc(db, 'artifacts', appId, 'public', 'data', 'voters', userKey));
       if (voterDoc.exists()) {
-        setError('이미 투표를 완료한 학생입니다.');
+        setError('이미 투표를 완료했습니다.');
         setIsVerifying(false);
         return false;
       }
@@ -245,7 +250,7 @@ export default function App() {
       setIsVerifying(false);
       return true;
     } catch (err) {
-      setError('데이터베이스 연결 오류');
+      setError('연결 오류');
       setIsVerifying(false);
       return false;
     }
@@ -263,8 +268,10 @@ export default function App() {
     const userKey = `${grade}${cls}${formattedNumber}${name}`;
     try {
       await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'votes', userKey), {
-        presidentId: selectedPresident.id,
-        vicePresidentId: selectedVicePresident.id,
+        presidentId: selectedPres.id,
+        vp1Id: selectedVP1.id,
+        vp2Id: selectedVP2.id,
+        vp3Id: selectedVP3.id,
         timestamp: new Date().toISOString()
       });
       await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'voters', userKey), {
@@ -304,17 +311,19 @@ export default function App() {
       votesSnap.docs.forEach((doc) => batch2.delete(doc.ref));
       await batch2.commit();
       setShowResetAllModal(false);
-    } catch (err) { console.error("전체 리셋 실패", err); } 
+    } catch (err) { console.error(err); } 
     finally { setIsResettingAll(false); }
   };
 
   const stats = useMemo(() => {
-    const results = { president: {}, vicePresident: {}, total: dbVotes.length };
+    const res = { pres: {}, vp1: {}, vp2: {}, vp3: {}, total: dbVotes.length };
     dbVotes.forEach(v => {
-      results.president[v.presidentId] = (results.president[v.presidentId] || 0) + 1;
-      results.vicePresident[v.vicePresidentId] = (results.vicePresident[v.vicePresidentId] || 0) + 1;
+      res.pres[v.presidentId] = (res.pres[v.presidentId] || 0) + 1;
+      res.vp1[v.vp1Id] = (res.vp1[v.vp1Id] || 0) + 1;
+      res.vp2[v.vp2Id] = (res.vp2[v.vp2Id] || 0) + 1;
+      res.vp3[v.vp3Id] = (res.vp3[v.vp3Id] || 0) + 1;
     });
-    return results;
+    return res;
   }, [dbVotes]);
 
   const filteredParticipationList = useMemo(() => {
@@ -333,7 +342,7 @@ export default function App() {
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-[2.5rem] shadow-2xl p-10 text-center border border-slate-100">
           <CheckCircle size={80} className="text-emerald-500 mx-auto mb-6" />
-          <h2 className="text-3xl font-black mb-4 tracking-tight text-slate-900">제출 성공</h2>
+          <h2 className="text-3xl font-black mb-4 tracking-tight text-slate-900">투표 제출 완료</h2>
           <p className="text-slate-600 mb-8 font-medium">참여해 주셔서 감사합니다.</p>
           <button onClick={() => window.location.reload()} className="w-full py-5 bg-slate-900 text-white rounded-2xl font-black transition-all active:scale-95">닫기</button>
         </div>
@@ -344,9 +353,10 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center py-12 px-4 font-sans text-slate-900 selection:bg-blue-100">
       <div className="max-w-3xl w-full">
+        {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full mb-4 uppercase tracking-[0.2em] shadow-lg">
-            <Lock size={12} /> SECURED SYSTEM
+            <Lock size={12} /> SECURED SYSTEM V5.1
           </div>
           <h1 className="text-4xl font-black mb-2 tracking-tighter text-slate-900">2026학년도 신명여자중학교 전교 회장단 선거</h1>
         </div>
@@ -369,53 +379,65 @@ export default function App() {
                 <input type="text" placeholder="이름" value={userData.name} onChange={(e) => setUserData({...userData, name: e.target.value})} className="w-full p-5 bg-slate-50 border-2 border-slate-100 rounded-2xl font-black text-xl px-8 mb-4 outline-none focus:border-blue-500" />
                 <div className="relative mb-6">
                   <KeyRound className="absolute left-6 top-1/2 -translate-y-1/2 text-blue-400" size={20} />
-                  <input type="text" placeholder="인증 코드 입력" value={userData.authCode} onChange={(e) => setUserData({...userData, authCode: e.target.value})} className="w-full p-5 pl-16 bg-blue-50 border-2 border-blue-100 rounded-2xl font-black text-xl outline-none focus:border-blue-500 placeholder:text-blue-200" />
+                  <input type="text" placeholder="인증 코드 입력" value={userData.authCode} onChange={(e) => setUserData({...userData, authCode: e.target.value})} className="w-full p-5 pl-16 bg-blue-50 border-2 border-blue-100 rounded-2xl font-black text-xl outline-none focus:border-blue-500" />
                 </div>
-                {error && <div className="p-4 bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 mb-6 flex items-center gap-2 text-sm font-black animate-in shake"><AlertCircle size={18} />{error}</div>}
+                {error && <div className="p-4 bg-rose-50 border border-rose-100 rounded-2xl text-rose-600 mb-6 flex items-center gap-2 text-sm font-black"><AlertCircle size={18} />{error}</div>}
                 <button disabled={!userData.grade || !userData.class || !userData.number || !userData.name || !userData.authCode || isVerifying} onClick={handleNextStep} className="w-full py-6 bg-blue-600 text-white rounded-3xl font-black text-xl shadow-xl transition-all active:scale-95">
                   {isVerifying ? <RefreshCw className="animate-spin mx-auto" /> : '인증 확인 및 투표 시작'}
                 </button>
               </div>
             )}
-            {(step === 2 || step === 3) && (
+
+            {[2, 3, 4, 5].includes(step) && (
               <div className="animate-in slide-in-from-right-8 duration-500">
-                <h2 className="text-2xl font-black mb-8 flex items-center gap-3 tracking-tight text-slate-900">
-                  {step === 2 ? <><Award className="text-amber-500" /> 전교 회장 후보</> : <><Users className="text-purple-500" /> 전교 부회장 후보</>}
-                </h2>
+                <div className="flex justify-between items-end mb-8">
+                  <h2 className="text-2xl font-black flex items-center gap-3 tracking-tight text-slate-900">
+                    {step === 2 && <><Award className="text-amber-500" /> 전교회장 투표</>}
+                    {step === 3 && <><Users className="text-blue-500" /> 1학년 전교부회장 투표</>}
+                    {step === 4 && <><Users className="text-indigo-500" /> 2학년 전교부회장 투표</>}
+                    {step === 5 && <><Users className="text-purple-500" /> 3학년 전교부회장 투표</>}
+                  </h2>
+                  <span className="text-xs font-black text-slate-400 tracking-widest uppercase">Step {step-1} / 4</span>
+                </div>
                 <div className="grid gap-4">
-                  {(step === 2 ? presidents : vicePresidents).map(c => (
-                    <div key={c.id} onClick={() => step === 2 ? setSelectedPresident(c) : setSelectedVicePresident(c)} 
-                         className={`p-8 bg-white rounded-[2rem] border-4 cursor-pointer transition-all flex justify-between items-center ${
-                           (step === 2 ? selectedPresident?.id === c.id : selectedVicePresident?.id === c.id) ? 'border-blue-600 bg-blue-50 shadow-lg scale-[1.01]' : 'border-white hover:border-slate-100'
-                         }`}>
-                      <div>
-                        <span className="text-[10px] font-black bg-slate-100 px-3 py-1 rounded-lg uppercase">기호 {step === 2 ? c.id : c.id-100}번</span>
-                        <h3 className="text-2xl font-black mt-2 text-slate-900">{c.name}</h3>
-                        <p className="text-slate-500 font-bold text-sm italic">"{c.slogan}"</p>
+                  {(step === 2 ? candidates.president : step === 3 ? candidates.vp1 : step === 4 ? candidates.vp2 : candidates.vp3).map(c => {
+                    const isSelected = (step===2 && selectedPres?.id===c.id) || (step===3 && selectedVP1?.id===c.id) || (step===4 && selectedVP2?.id===c.id) || (step===5 && selectedVP3?.id===c.id);
+                    return (
+                      <div key={c.id} onClick={() => {
+                        if(step===2) setSelectedPres(c); if(step===3) setSelectedVP1(c); if(step===4) setSelectedVP2(c); if(step===5) setSelectedVP3(c);
+                      }} className={`p-6 bg-white rounded-[1.5rem] border-4 cursor-pointer transition-all flex justify-between items-center ${isSelected ? 'border-blue-600 bg-blue-50 shadow-lg scale-[1.01]' : 'border-white hover:border-slate-100'}`}>
+                        <div>
+                          <span className="text-[10px] font-black bg-slate-100 px-3 py-1 rounded-lg uppercase tracking-wider">기호 {c.id % 100}번</span>
+                          <h3 className="text-xl font-black mt-2 text-slate-900">{c.name}</h3>
+                          <p className="text-slate-500 font-bold text-sm italic">"{c.slogan}"</p>
+                        </div>
+                        <CheckCircle size={28} className={isSelected ? 'text-blue-600' : 'text-slate-100'} />
                       </div>
-                      <CheckCircle size={32} className={(step === 2 ? selectedPresident?.id === c.id : selectedVicePresident?.id === c.id) ? 'text-blue-600' : 'text-slate-100'} />
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div className="flex gap-4 mt-10">
-                  <button onClick={() => setStep(step - 1)} className="flex-1 py-5 bg-white border border-slate-200 rounded-3xl font-black transition-all active:scale-95">이전</button>
-                  <button disabled={step === 2 ? !selectedPresident : !selectedVicePresident} onClick={handleNextStep} className="flex-[2] py-5 bg-blue-600 text-white rounded-3xl font-black text-lg shadow-lg active:scale-95 transition-all">다음 단계</button>
+                  <button onClick={() => setStep(step - 1)} className="flex-1 py-4 bg-white border border-slate-200 rounded-2xl font-black transition-all active:scale-95 flex items-center justify-center gap-2"><ChevronLeft size={18}/>이전</button>
+                  <button disabled={(step===2 && !selectedPres) || (step===3 && !selectedVP1) || (step===4 && !selectedVP2) || (step===5 && !selectedVP3)} onClick={handleNextStep} className="flex-[2] py-4 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2">다음 단계 <ChevronRight size={18}/></button>
                 </div>
               </div>
             )}
-            {step === 4 && (
+
+            {step === 6 && (
               <div className="bg-white rounded-[3rem] shadow-2xl p-10 border border-slate-100 animate-in zoom-in duration-500">
-                <h2 className="text-3xl font-black text-center mb-10 tracking-tight uppercase text-slate-900">최종 투표 내용 확인</h2>
-                <div className="space-y-6 mb-10 text-center">
-                  <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 font-black text-xl tracking-tight text-slate-900">{userData.grade}학년 {userData.class}반 {userData.number}번 {userData.name}</div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-6 bg-amber-50 border border-amber-100 rounded-3xl font-black"><p className="text-xs text-amber-600 mb-1 uppercase tracking-widest text-slate-900">전교회장</p>{selectedPresident?.name}</div>
-                    <div className="p-6 bg-purple-50 border border-purple-100 rounded-3xl font-black"><p className="text-xs text-purple-600 mb-1 uppercase tracking-widest text-slate-900">전교부회장</p>{selectedVicePresident?.name}</div>
+                <h2 className="text-2xl font-black text-center mb-10 tracking-tight uppercase text-slate-900">최종 투표 내용 확인</h2>
+                <div className="space-y-4 mb-10">
+                  <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 font-black text-center text-lg">{userData.grade}학년 {userData.class}반 {userData.number}번 {userData.name}</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="p-5 bg-amber-50 border border-amber-100 rounded-2xl font-black"><p className="text-[10px] text-amber-600 mb-1 uppercase tracking-widest font-black">전교회장</p>{selectedPres?.name}</div>
+                    <div className="p-5 bg-blue-50 border border-blue-100 rounded-2xl font-black"><p className="text-[10px] text-blue-600 mb-1 uppercase tracking-widest font-black">1학년 전교부회장</p>{selectedVP1?.name}</div>
+                    <div className="p-5 bg-indigo-50 border border-indigo-100 rounded-2xl font-black"><p className="text-[10px] text-indigo-600 mb-1 uppercase tracking-widest font-black">2학년 전교부회장</p>{selectedVP2?.name}</div>
+                    <div className="p-5 bg-purple-50 border border-purple-100 rounded-2xl font-black"><p className="text-[10px] text-purple-600 mb-1 uppercase tracking-widest font-black">3학년 전교부회장</p>{selectedVP3?.name}</div>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <button onClick={() => setStep(3)} className="flex-1 py-5 bg-slate-100 rounded-3xl font-black transition-all active:scale-95">수정</button>
-                  <button onClick={handleSubmit} className="flex-[2] py-5 bg-emerald-600 text-white rounded-3xl font-black text-xl shadow-xl hover:bg-emerald-700 active:scale-95 transition-all">투표 제출하기</button>
+                  <button onClick={() => setStep(5)} className="flex-1 py-5 bg-slate-100 rounded-2xl font-black transition-all active:scale-95">수정</button>
+                  <button onClick={handleSubmit} className="flex-[2] py-5 bg-emerald-600 text-white rounded-2xl font-black text-xl shadow-xl hover:bg-emerald-700 active:scale-95 transition-all">최종 투표 제출</button>
                 </div>
               </div>
             )}
@@ -426,11 +448,11 @@ export default function App() {
                 <div className="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center">
                   <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in">
                     <div className="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4"><RotateCcw size={32} /></div>
-                    <h4 className="text-xl font-black mb-2 text-slate-900">개별 리셋 확인</h4>
-                    <p className="text-sm text-slate-500 font-bold mb-6 tracking-tight">해당 학생의 투표 데이터만 삭제하시겠습니까?</p>
+                    <h4 className="text-xl font-black mb-2 text-slate-900">개별 리셋</h4>
+                    <p className="text-sm text-slate-500 font-bold mb-6 tracking-tight">해당 학생의 투표 데이터를 삭제하시겠습니까?</p>
                     <div className="flex gap-3">
                       <button onClick={() => setResetConfirm(null)} className="flex-1 py-3 bg-slate-100 rounded-xl font-bold">취소</button>
-                      <button onClick={() => handleResetVoter(resetConfirm)} className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg">진행</button>
+                      <button onClick={() => handleResetVoter(resetConfirm)} className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold">진행</button>
                     </div>
                   </div>
                 </div>
@@ -439,20 +461,20 @@ export default function App() {
                 <div className="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center">
                   <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in">
                     <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-full flex items-center justify-center mx-auto mb-4"><AlertTriangle size={32} /></div>
-                    <h4 className="text-xl font-black mb-2 text-slate-900">전체 데이터 초기화</h4>
-                    <p className="text-sm text-rose-500 font-black mb-6 leading-tight">주의! 모든 학생의 투표 기록과 득표 결과가 완전히 삭제됩니다.</p>
+                    <h4 className="text-xl font-black mb-2 text-slate-900">전체 초기화</h4>
+                    <p className="text-sm text-rose-500 font-black mb-6">모든 학생의 투표 기록과 득표 결과가 완전히 삭제됩니다.</p>
                     <div className="flex gap-3">
                       <button onClick={() => setShowResetAllModal(false)} className="flex-1 py-3 bg-slate-100 rounded-xl font-bold">취소</button>
-                      <button onClick={handleResetAllVotes} disabled={isResettingAll} className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg flex items-center justify-center gap-2">
-                        {isResettingAll ? <RefreshCw className="animate-spin" size={16}/> : '전체 삭제 실행'}
+                      <button onClick={handleResetAllVotes} disabled={isResettingAll} className="flex-1 py-3 bg-rose-600 text-white rounded-xl font-bold shadow-lg">
+                        {isResettingAll ? '삭제 중...' : '전체 삭제 실행'}
                       </button>
                     </div>
                   </div>
                 </div>
               )}
               <div className="bg-slate-900 p-8 text-white flex justify-between items-center">
-                <h3 className="text-xl font-black flex items-center gap-3">{isAdminAuthenticated ? <><ShieldCheck className="text-emerald-400" /> 관리 대시보드</> : <><KeyRound className="text-blue-400" /> 보안 인증</>}</h3>
-                <button onClick={() => {setShowAdminPanel(false); setIsAdminAuthenticated(false); setAdminAuthForm({id:'', pw:''});}} className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-all"><X size={18}/></button>
+                <h3 className="text-xl font-black flex items-center gap-3"><ShieldCheck className="text-emerald-400" /> {isAdminAuthenticated ? '관리 대시보드' : '보안 인증'}</h3>
+                <button onClick={() => {setShowAdminPanel(false); setIsAdminAuthenticated(false);}} className="p-2 bg-white/10 rounded-full hover:bg-white/20 transition-all"><X size={18}/></button>
               </div>
               {!isAdminAuthenticated ? (
                 <form onSubmit={handleAdminLogin} className="p-10 space-y-4">
@@ -465,36 +487,66 @@ export default function App() {
                 <div className="p-8 space-y-8 animate-in fade-in duration-500">
                   <div className="flex bg-slate-100 p-1.5 rounded-2xl">
                     <button onClick={()=>setAdminTab('stats')} className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${adminTab === 'stats' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500'}`}>집계</button>
-                    <button onClick={()=>setAdminTab('list')} className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${adminTab === 'list' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-50'}`}>명단</button>
+                    <button onClick={()=>setAdminTab('list')} className={`flex-1 py-3 rounded-xl font-black text-sm transition-all ${adminTab === 'list' ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500'}`}>명단</button>
                   </div>
                   {adminTab === 'stats' ? (
                     <div className="space-y-10">
                       <div className="flex flex-wrap justify-between items-center gap-4">
-                        <p className="font-bold text-slate-500 text-sm tracking-tight text-slate-900">전체 투표율: <span className="text-blue-600 font-black text-xl">{((stats.total / totalStudentsList.length) * 100).toFixed(1)}%</span> ({stats.total}/{totalStudentsList.length}명)</p>
-                        <button onClick={() => setShowResetAllModal(true)} className="px-4 py-2 bg-rose-50 text-rose-600 border border-rose-100 rounded-xl text-xs font-black flex items-center gap-2 hover:bg-rose-100 transition-all"><Trash2 size={14}/> 전체 투표 데이터 초기화</button>
+                        <p className="font-black text-slate-700 text-sm">전체 투표율: <span className="text-blue-600 text-xl">{((stats.total / totalStudentsList.length) * 100).toFixed(1)}%</span> ({stats.total}/{totalStudentsList.length}명)</p>
+                        <button onClick={() => setShowResetAllModal(true)} className="px-4 py-2 bg-rose-50 text-rose-600 border border-rose-100 rounded-xl text-xs font-black flex items-center gap-2 hover:bg-rose-100 transition-all"><Trash2 size={14}/> 전체 초기화</button>
                       </div>
-                      <div className="grid md:grid-cols-2 gap-8">
-                        <div className="space-y-6">
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2 text-center">전교회장</p>
-                          {presidents.map(p => {
-                            const count = stats.president[p.id] || 0;
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+                        {/* 회장 집계 */}
+                        <div className="space-y-4">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">전교회장</p>
+                          {candidates.president.map(p => {
+                            const count = stats.pres[p.id] || 0;
                             const percent = stats.total > 0 ? (count / stats.total) * 100 : 0;
                             return (
                               <div key={p.id} className="space-y-1.5">
-                                <div className="flex justify-between text-xs font-black text-slate-700"><span>기호 {p.id} {p.name}</span><span>{count}표</span></div>
+                                <div className="flex justify-between text-xs font-black text-slate-700"><span>{p.name}</span><span>{count}표</span></div>
+                                <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-amber-500 transition-all duration-700" style={{ width: `${percent}%` }} /></div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {/* 1학년 부회장 */}
+                        <div className="space-y-4">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">1학년 전교부회장</p>
+                          {candidates.vp1.map(p => {
+                            const count = stats.vp1[p.id] || 0;
+                            const percent = stats.total > 0 ? (count / stats.total) * 100 : 0;
+                            return (
+                              <div key={p.id} className="space-y-1.5">
+                                <div className="flex justify-between text-xs font-black text-slate-700"><span>{p.name}</span><span>{count}표</span></div>
                                 <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-blue-500 transition-all duration-700" style={{ width: `${percent}%` }} /></div>
                               </div>
                             );
                           })}
                         </div>
-                        <div className="space-y-6">
-                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2 text-center">전교부회장</p>
-                          {vicePresidents.map(p => {
-                            const count = stats.vicePresident[p.id] || 0;
+                        {/* 2학년 부회장 */}
+                        <div className="space-y-4">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">2학년 전교부회장</p>
+                          {candidates.vp2.map(p => {
+                            const count = stats.vp2[p.id] || 0;
                             const percent = stats.total > 0 ? (count / stats.total) * 100 : 0;
                             return (
                               <div key={p.id} className="space-y-1.5">
-                                <div className="flex justify-between text-xs font-black text-slate-700"><span>기호 {p.id-100} {p.name}</span><span>{count}표</span></div>
+                                <div className="flex justify-between text-xs font-black text-slate-700"><span>{p.name}</span><span>{count}표</span></div>
+                                <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-indigo-500 transition-all duration-700" style={{ width: `${percent}%` }} /></div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {/* 3학년 부회장 */}
+                        <div className="space-y-4">
+                          <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest border-b pb-2">3학년 전교부회장</p>
+                          {candidates.vp3.map(p => {
+                            const count = stats.vp3[p.id] || 0;
+                            const percent = stats.total > 0 ? (count / stats.total) * 100 : 0;
+                            return (
+                              <div key={p.id} className="space-y-1.5">
+                                <div className="flex justify-between text-xs font-black text-slate-700"><span>{p.name}</span><span>{count}표</span></div>
                                 <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden"><div className="h-full bg-purple-500 transition-all duration-700" style={{ width: `${percent}%` }} /></div>
                               </div>
                             );
@@ -510,7 +562,7 @@ export default function App() {
                         <select onChange={(e)=>setFilterStatus(e.target.value)} className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold outline-none"><option value="all">상태</option><option value="voted">완료</option><option value="not_voted">미참여</option></select>
                         <div className="relative"><Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" /><input type="text" placeholder="검색" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)} className="w-full p-3 pl-9 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-bold outline-none" /></div>
                       </div>
-                      <div className="bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden max-h-[300px] overflow-y-auto">
+                      <div className="bg-slate-50 rounded-2xl border border-slate-100 overflow-hidden max-h-[400px] overflow-y-auto">
                         <table className="w-full text-left text-[10px]">
                           <thead className="sticky top-0 bg-slate-200 font-black uppercase tracking-tighter"><tr><th className="p-3 text-slate-900">학생 정보</th><th className="p-3 text-center text-slate-900">상태</th><th className="p-3 text-center text-slate-900">리셋</th></tr></thead>
                           <tbody className="divide-y divide-slate-100 bg-white">
@@ -538,7 +590,7 @@ export default function App() {
             <button onClick={() => setShowAdminPanel(true)} className="flex items-center gap-2 mx-auto text-slate-400 hover:text-blue-600 font-bold text-sm transition-colors uppercase tracking-[0.2em]"><BarChart3 size={16} /> Admin Mode</button>
           )}
         </div>
-        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em]">EMS Terminal V4.1 Secure Build</footer>
+        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em]">EMS Terminal V5.1 Secure Build</footer>
       </div>
     </div>
   );
