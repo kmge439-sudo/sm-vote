@@ -32,12 +32,12 @@ const D3 = "1501:강에일린:3202,1502:구민채:5689,1503:김다연:1220,1504:
 const D4 = "1701:고소현:3209,1702:곽나경:5696,1703:구은재:1227,1704:권나현:9955,1705:김다윤:4443,1706:김서연:6733,1707:김시은:2405,1708:김연아:7732,1709:김예은:1563,1710:김윤하:3943,1711:김은서:8862,1712:김주하:6641,1713:류이안:2125,1714:박수하:5559,1715:스미스클로이:9033,1716:신재은:4348,1717:육예지:7632,1718:이서진:1319,1719:이솔민:3430,1720:이연서:5131,1721:이지아:6803,1722:이채연:2266,1723:이하연:9022,1724:장서이:1144,1725:정소윤:4471,1726:조서현:8783,1727:조현서:3362,1728:지서연:6113,1729:차수진:2008,1730:최가온:7742,1731:최예진:4582,1801:강나겸:8941,1802:김가령:1125,1803:김나연:3473,1804:김민채:7802,1805:김서연:2255,1806:김서현:9040,1807:김시현:6675,1808:김예나:4342,1809:김정민:8833,1810:김지윤:5564,1811:김채윤:1219,1812:김효담:7630,1813:박다은:3442,1815:손연주:9922,1816:원다경:2153,1817:윤나경:6805,1818:이다은:1222,1819:이도희:8255,1821:이채윤:4477,1822:장효서:3370,1823:정수아:9029,1824:정유진:1148,1825:채시안:5692,1826:최가은:8786,1827:최라임:2402,1828:최수현:4433,1829:최윤채:6640,1830:팔리로니스해나루이즈:8853,1831:황서율:1275,1832:김민서:7762";
 const D5 = "1901:강소윤:3216,1902:고나영:5703,1903:구나은:1234,1904:권나연:9962,1905:권율하:4450,1906:김다윤:6740,1907:김서윤:2412,1908:김수하:7739,1909:노윤채:1570,1910:박가은:3950,1911:박나경:8869,1912:박서우:6648,1913:박시은:2132,1914:박지연:5566,1915:서아진:9040,1916:서예린:4355,1917:서현아:7639,1918:윤정원:1326,1919:이규민:3437,1920:이나현:5138,1921:이서현:6810,1922:이은서:2273,1923:이지윤:9029,1924:이채연:1151,1925:장예원:4478,1926:전다현:8790,1927:정지유:3369,1928:주효주:6120,1929:천세은:2015,1930:천지민:7749,1931:최민서:4589,2101:권보윤:8948,2102:김민서:1132,2103:김세경:3480,2104:김소현:7809,2105:김연재:2262,2106:김예은:9047,2107:김주원:6682,2108:김주은:4349,2109:김지우:8840,2110:김채율:5571,2111:김태이:1226,2112:김하진:7637,2113:남연수:3449,2114:남유담:9929,2115:노하영:2160,2116:박세영:6812,2117:박소윤:1229,2118:박영은:8262,2119:서지원:4484,2120:서한비:3377,2121:송서영:9036,2122:신보빈:1155,2123:안효신:5699,2124:엄선경:8793,2125:윤서영:2409,2126:윤혜솔:4440,2127:이경은:6647,2128:이다원:8860,2129:이라희:1282,2130:이미림:7769,2131:이효리:3223,2132:정라원:5710,2133:정지우:1241,2134:차예설:9969";
 const D6 = "2201:공가윤:4457,2202:권효주:6747,2203:김도연:2419,2204:김도이:7746,2205:김민재:1577,2206:김시원:3957,2207:김지민:8876,2208:김지우:6655,2209:김태희:2139,2210:김하린:5573,2211:류겸미:9047,2212:박건희:4362,2213:박규빈:7646,2214:박정인:1333,2215:신소율:3444,2216:신한별:5145,2217:안혜림:6817,2218:오유림:2280,2219:원하라:9036,2220:윤수민:1158,2221:윤지혜:4485,2222:윤채현:8797,2223:이나현:3376,2224:이수민:6127,2225:이지민:2022,2226:이효우:7756,2227:임연서:4596,2228:전소율:8955,2229:정연우:1139,2230:조진아:3487,2231:조채윤:7816,2232:천혜원:2269,2233:최아랑:9054,2234:추민서:6689,2301:구해나:4356,2302:구해린:8847,2303:권서연:5578,2304:권세라:1233,2305:권희원:7644,2306:김나윤:3456,2307:김민서:9936,2308:김민슬:2167,2309:김보현:6819,2310:김시원:1236,2311:김연아:8269,2312:김윤민:4491,2313:김지연:3384,2314:김지유:9043,2315:남건희:1162,2316:도효은:5706,2317:박서윤:8800,2318:박지희:2416,2319:빈예진:4447,2320:서하진:6654,2321:안세민:8867,2322:오지윤:1289,2323:윤리라:7776,2324:이고원:3230,2325:이서영:5717,2327:이유나:1248,2328:이채민:9976,2329:이혜민:4464,2330:전율:6754,2331:주예진:2426,2332:차지윤:7753,2333:최정연:1584,2334:허다현:3964";
-const D7 = "2401:강나현:8883,2402:공민주:6662,2403:권현아:2146,2404:김다인:5580,2405:김민서:9054,2406:김민주:4369,2407:김수연:7653,2408:김연서:1340,2409:김예나:3451,2410:김예원:5152,2411:김유나:6824,2412:김은유:2287,2413:김지우:9043,2414:김채현:1165,2415:도민슬:4492,2416:박서은:8804,2417:배수민:3383,2418:성지희:6134,2419:성혜지:2029,2420:안은솔:7763,2421:이세령:4603,2422:이승연:8962,2423:이유나:1146,2424:이지영:3494,2425:이하율:7823,2426:임현서:2276,2427:임혜인:9061,2428:장채완:6696,2429:전아인:4363,2430:천율이:8854,2431:최지우:5585,2432:한예지:1240,2433:홍수연:7651,2501:강아연:3463,2502:곽유진:9943,2503:권수빈:2174,2504:권효언:6826,2505:김가윤:1243,2506:김규린:8276,2507:김민서:4498,2508:김민채:3391,2509:김소은:9050,2510:김수연:1169,2511:김예후:5713,2512:문서현:8807,2513:박혜린:2423,2514:석예지:4454,2515:성한별:6661,2516:신연우:8874,2517:심민정:1296,2518:여서현:7783,2519:예서영:3237,2520:윤가인:5724,2521:이담희:1255,2522:이서희:9983,2523:이세연:4471,2524:이예원:6761,2526:임하음:2433,2527:장윤서:7760,2528:정아진:1591,2529:정유나:3971,2530:정은유:8890,2531:정지우:6669,2532:조은별:2153,2533:주효안:5587,2601:권유안:9061,2602:김나현:4376,2603:김려원:7660,2604:김서희:1347,2605:김영원:3458,2606:김지빈:5159,2607:김채민:6831,2608:나연우:2294,2609:남서연:9050,2610:문지원:1172,2611:박지성:4499,2612:박나연:6796,2613:박다영:3390,2614:박민서:6141,2615:박예진:2036,2616:박현서:7770,2617:배수빈:4610,2618:서지운:8969,2619:성채원:1153,2620:윤슬:3501,2621:이서영:7830,2622:이세랑:2283,2623:이주희:9068,2624:이지율:6703,2625:임유나:4370,2626:전하진:8861,2627:정수현:5592,2628:정시윤:1247,2629:정윤슬:7658,2630:정해린:3470,2631:채민하:9950,2632:천가인:2181,2633:최윤슬:6833,2634:최희수:1250";
+const D7 = "2401:강나현:8883,2402:공민주:6662,2403:권현아:2146,2404:김다인:5580,2405:김민서:9054,2406:김민주:4369,2407:김수연:7653,2408:김연서:1340,2409:김예나:3451,2410:김예원:5152,2411:김유나:6824,2412:김은유:2287,2413:김지우:9043,2414:김채현:1165,2415:도민슬:4492,2416:박서은:8804,2417:배수민:3383,2418:성지희:6134,2419:성혜지:2029,2420:안은솔:7763,2421:이세령:4603,2422:이승연:8962,2423:이유나:1146,2424:이지영:3494,2425:이하율:7823,2426:임현서:2276,2427:임혜인:9061,2428:장채완:6696,2429:전아인:4363,2430:천율이:8854,2431:최지우:5585,2432:한예지:1240,2433:홍수연:7651,2501:강아연:3463,2502:곽유진:9943,2503:권수빈:2174,2504:권효언:6826,2505:김가윤:1243,2506:김규린:8276,2507:김민서:4498,2508:김민채:3391,2509:김소은:9050,2510:김수연:1169,2511:김예후:5713,2512:문서현:8807,2513:박혜린:2423,2514:석예지:4454,2515:성한별:6661,2516:신연우:8874,2517:심민정:1296,2518:여서현:7783,2519:예서영:3237,2520:윤가인:5724,2521:이담희:1255,2522:이서희:9983,2523:이세연:4471,2524:이예원:6761,2526:임하음:2433,2527:장윤서:7760,2528:정아진:1591,2529:정유나:3971,2530:정은유:8890,2531:정지우:6669,2532:조은별:2153,2533:주효안:5587,2601:권유안:9061,2602:김나현:4376,2603:김려원:7660,2604:김서희:1347,2605:김영원:3458,2606:김지빈:5159,2607:김채민:6831,2608:나연우:2294,2609:남서연:9050,2610:문지원:1172,2611:박지성:4499,2612:박나연:8811,2613:박다영:3390,2614:박민서:6141,2615:박예진:2036,2616:박현서:7770,2617:배수민:4610,2618:서지운:8969,2619:성채원:1153,2620:윤슬:3501,2621:이서영:7830,2622:이세랑:2283,2623:이주희:9068,2624:이지율:6703,2625:임유나:4370,2626:전하진:8861,2627:정수현:5592,2628:정시윤:1247,2629:정윤슬:7658,2630:정해린:3470,2631:채민하:9950,2632:천가인:2181,2633:최윤슬:6833,2634:최희수:1250";
 const D8 = "2701:권하윤:8283,2702:김경은:4505,2703:김단희:3398,2704:김민채:9057,2705:김서령:1176,2706:김성연:5720,2707:김이슬:8814,2708:김주희:2430,2709:김채윤:4461,2710:류민서:6668,2711:문규림:8881,2712:박다해:1303,2713:박소영:7790,2714:박지수:3244,2715:박채은:5731,2716:백승연:1262,2717:백하비:9990,2718:변예진:4478,2719:서보배:6768,2720:신아윤:2440,2721:심예담:7767,2722:양채원:1598,2723:여소율:3978,2724:유수진:8897,2725:이수연:6676,2726:이하린:2160,2727:이효린:5594,2728:장아영:9068,2729:장혜리:4383,2730:정연후:7667,2731:정하은:1354,2732:하연재:3465,2733:한윤슬:5166,2801:권효서:6838,2802:김가연:2301,2803:김가예:9057,2804:김나온:1179,2805:김소연:4506,2806:김연서:8818,2807:김연우:3397,2808:김유진:6148,2809:김주혜:2043,2810:김지우:7777,2811:박시연:4617,2812:박예봄:8976,2813:서예빈:1160,2814:신은설:3508,2815:여시화:7837,2816:유채령:2290,2817:윤연우:9075,2818:이도혜:6710,2819:이라현:4377,2820:이서현:8868,2821:이채은:5599,2822:이하은:1254,2823:전지현:7665,2824:전현서:3477,2825:정윤지:9957,2826:조서연:2188,2827:지송은:6840,2828:진은서:1257,2829:최유란:8290,2830:최윤서:4512,2831:하지원:3405,2832:허수진:9064,2833:황서윤:1183,2901:강소율:5727,2902:김가은:8821,2903:김나윤:2437,2904:김나현:4468,2905:김서연:6675,2906:김수영:8888,2907:김은우:1310,2908:김인하:7797,2909:김하은:3251,2910:도예서:5738,2911:도유빈:1269,2912:도윤슬:9997,2913:박민서:4485,2914:박선영:6775,2915:박소이:2447,2916:박수빈:7774,2917:박윤서:1605,2918:백서현:3985,2919:손지민:8904,2920:송현지:6683,2921:심윤서:2167,2922:안민슬:5601,2923:음채우:9075,2924:이다은:4390,2925:이수연:7674,2926:이연우:1361,2927:이예진:3472,2928:이윤진:5173,2929:장채윤:6845,2930:전이진:2308,2931:정다연:9064,2932:정려원:1186,2933:정하린:4513";
 const S9 = "3101:김가령:8825,3102:김수연:3404,3103:김승은:6155,3104:김시현:2050,3105:김예담:7784,3106:김이경:4624,3107:김주연:8983,3108:김주원:1167,3109:김효림:3515,3110:김효빈:7844,3111:박서윤:2297,3112:박세은:9082,3113:박지윤:6717,3114:박채영:4384,3115:배드린:8875,3116:손유:5606,3117:손지우:1261,3118:송슬:7672,3119:유재서:3484,3120:윤서윤:9964,3121:윤혜린:2195,3122:장하은:6847,3123:전하늘:1264,3124:조희진:8297,3125:천영서:4519,3126:천지민:3412,3127:최민서:9071,3128:최정윤:1190,3129:최한나:5734,3130:황정윤:8828,3201:강현진:2444,3202:곽예설:4475,3203:김가온:6682,3204:김민하:8895,3205:김예림:1317,3206:김예서:7804,3207:지원:3258,3208:김태영:5745,3209:김하은:1276,3210:남유민:1004,3211:문예진:4492,3212:박서윤:6782,3213:박서진:2454,3214:박수민:7781,3215:박채연:1612,3216:설하영:3992,3217:예도연:8911,3218:우승은:6690,3219:이세은:2174,3220:이유주:5608,3221:이하정:9082,3222:임서영:4397,3223:정규현:7681,3224:정다인:1368,3225:정서영:3479,3226:최가은:5180,3227:최다연:6852,3228:최리아:2315,3229:최지우:9071,3230:최희윤:1193,3301:강현서:4520,3302:권아연:8832,3303:김민유:3411,3304:김보미:6162,3305:김서영:2057,3306:김소윤:7791,3307:김소은:4631,3308:김예지:8990,3309:김지율:1174,3310:김현서:3522,3311:남승연:7851,3312:박새봄:2304,3313:박지후:9089,3314:박채은:6724,3315:박혜린:4391,3316:박혜진:8882,3317:박효은:5613,3318:배시온:1268,3319:오서윤:7679,3320:오세율:3491,3321:이경민:9971,3322:이은희:2202,3323:이채은:6854,3324:이혜원:1271,3325:장혜정:8304,3326:조한울:4526,3327:주은성:3419,3328:진연우:9078,3329:황다현:1197,3330:황서영:5741";
 const S10 = "3401:곽다연:8835,3402:김가은:2451,3403:김민선:4482,3404:김지원:6689,3405:노하정:8902,3406:도하진:1324,3407:박경빈:7811,3408:박미준:3265,3409:박서영:5752,3410:박서윤:1283,3411:배가은:1011,3412:백하영:4499,3413:손민주:6789,3414:손예영:2461,3415:송민아:7788,3416:신나라:1619,3417:신서연:3999,3418:우지민:8918,3419:이서아:6697,3420:이서율:2181,3421:이세령:5615,3422:이소정:9089,3423:이연우:4404,3424:정아인:7688,3425:정해원:1375,3426:최효리:3486,3427:최휘진:5187,3428:현다연:6859,3429:홍도영:2322,3430:황서영:9078,3431:황서휘:1200,3501:권가람:4527,3502:권도연:8839,3503:김사랑:3418,3504:김수정:6169,3505:김유진:2064,3506:김은서:7798,3507:김현주:4638,3508:손서윤:8997,3509:송지은:1181,3510:송채윤:3529,3511:신다솜:7858,3512:신예원:2311,3513:양소윤:9096,3514:우정민:6731,3515:유수민:4398,3516:이비안:8889,3517:이서진:5620,3518:이유진:1275,3519:이윤서:7686,3520:이지안:3498,3521:이채은:9978,3522:이현서:2209,3523:전지율:6861,3524:정다은:1278,3525:정유림:8311,3526:정은교:4533,3527:진효림:3426,3528:최연우:9085,3529:최희재:1204,3530:하지우:5748,3531:황봄:8842,3601:김경민:2458,3602:김고은:4489,3603:김기란:6696,3604:김미령:8909,3605:김사랑:1331,3606:김소연:7818,3607:김소윤:3272,3608:김예린:5759,3609:김지우:1290,3610:문서영:1018,3611:박나연:6796,3612:박지성:4506,3613:백인경:2468,3614:서지우:7795,3615:서혜정:1626,3616:송주연:4006,3617:신효주:8925,3618:윤선진:6704,3619:윤수아:2188,3620:윤진서:5622,3621:이선주:9096,3622:이수안:4411,3623:이지우:7695,3624:임주비:1382,3625:임하윤:3493,3626:전소이:5194,3627:전지윤:6866,3628:정지민:2329,3629:천사론:9085,3630:한서윤:1207,3631:황혜린:4534,3701:강연우:8846,3702:곽은빈:3425,3703:김가을:6176,3704:김란희:2071,3705:김영아:7805,3706:김채윤:4645,3707:김효린:9004,3708:박다은:1188,3709:박민서:3536,3710:박보민:7865,3711:박서윤:2318,3712:박현서:9103,3713:변서현:6738,3714:신서영:4398,3715:여효이:8896,3716:오채원:5627,3717:이라은:1282,3718:이서연:7693,3719:이시원:3505,3720:이예은:9985,3721:이제아:2216,3722:이현진:6868,3723:이효주:1285,3724:정다민:8318,3725:정은희:4540,3726:조시연:3433,3727:천예현:9092,3728:최유리:1211,3729:최재원:5755,3730:하루아:8849,3731:허다령:2465,3801:권경민:4496,3802:권예린:6703,3803:김수혜:8916,3804:김윤아:1338,3805:김지인:7825,3806:김한결:3279,3807:박채원:5766,3808:배해인:1297,3809:서지우:1025,3810:양예지:4513,3811:이나경:6803,3812:이다인:2475,3813:이세은:7802,3814:이승은:1633,3815:이지윤:4013,3816:이채은:8932,3817:이효원:6711,3818:임소현:2195,3819:전민지:5629,3820:정민주:9103,3821:조다혜:4418,3822:지수현:7702,3823:차승연:1389,3824:천원정:3500,3825:최아영:5201,3826:최유나:6873,3827:최윤화:2336,3828:하민서:9092,3829:홍승아:1214,3830:황수현:4541,3901:권윤솔:8853,3902:김미담:3432,3903:김민지:6183,3904:김민채:2078,3905:김수아:7812,3906:김유진:4652,3907:김정현:9011,3908:김지아:1195,3909:남민지:3543,3910:박선우:7872,3911:박지현:2325,3912:백민주:9110,3913:빈다은:6745,3914:손주연:4405,3915:손현재:8903,3916:신그린:5634,3917:오은채:1289,3918:윤소원:7700,3919:이가윤:3512,3920:이시윤:9992,3921:이은교:2223,3922:이채윤:6875,3923:이한비:1292,3924:전하늘:8325,3925:정여원:4547,3926:조민영:3440,3927:지예안:9099,3928:최은교:1218,3929:허윤서:5762,3930:황서영:8856";
 
-// 실시간 파싱 함수
+// 실시간 파싱 함수 (데이터 덩어리들을 완벽하게 합쳐서 849명을 만듦)
 const parseFullStudentList = () => {
   const map = {};
   [D1, D2, D3, D4, D5, D6, D7, D8, S9, S10].forEach(chunk => {
@@ -52,7 +52,8 @@ const parseFullStudentList = () => {
 
 const FINAL_AUTH_CODES_MAP = parseFullStudentList();
 
-const candidates = {
+// 후보자 초기 데이터 정의 (오류 발생 부분 수정)
+const INITIAL_CANDIDATES = {
   president: [
     { id: 1, name: '황수현', slogan: '3학년 8반의 열정으로 학교를 빛내겠습니다!' },
     { id: 2, name: '김병진', slogan: '3학년 6반의 리더십, 신명의 변화를 약속합니다.' },
@@ -61,12 +62,9 @@ const candidates = {
     { id: 5, name: '손희동', slogan: '3학년 7반의 진심, 발로 뛰는 일꾼이 되겠습니다.' },
     { id: 6, name: '김민혜', slogan: '3학년 4반의 따뜻함, 학생들의 목소리를 듣겠습니다.' }
   ],
-  vp1: [
-    { id: 101, name: '후보1', slogan: '1학년을 위한 슬로건' },
-    { id: 102, name: '후보2', slogan: '행동으로 보여주는 1학년' }
-  ],
-  vp2: [{ id: 201, name: '후보A', slogan: '2학년의 자부심' }],
-  vp3: [{ id: 301, name: '후보X', slogan: '3학년의 마지막 열정' }]
+  vp1: [{ id: 101, name: '미정', slogan: '공약을 입력하세요' }],
+  vp2: [{ id: 201, name: '미정', slogan: '공약을 입력하세요' }],
+  vp3: [{ id: 301, name: '미정', slogan: '공약을 입력하세요' }]
 };
 
 export default function App() {
@@ -130,7 +128,11 @@ export default function App() {
     const unsubSettings = onSnapshot(settingsRef, (snapshot) => {
       if (snapshot.exists()) { setVotingState(snapshot.data().status || 'ready'); }
     });
-    return () => unsubSettings();
+    const unsubCandidates = onSnapshot(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'candidates'), (snap) => {
+      if (snap.exists()) setDbCandidates(snap.data());
+      else setDbCandidates(INITIAL_CANDIDATES);
+    });
+    return () => { unsubSettings(); unsubCandidates(); };
   }, [user]);
 
   useEffect(() => {
@@ -209,7 +211,7 @@ export default function App() {
     if (!user || !isAdminAuthenticated) return;
     try {
       await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'settings', 'votingControl'), { status });
-    } catch (err) { alert("오류: " + err.message); }
+    } catch (err) { }
   };
 
   const handleAdminLogin = (e) => {
@@ -243,7 +245,7 @@ export default function App() {
       votesSnap.docs.forEach((doc) => batch2.delete(doc.ref));
       await batch2.commit();
       setShowResetAllModal(false);
-    } catch (err) { console.error(err); } 
+    } catch (err) { } 
     finally { setIsResettingAll(false); }
   };
 
@@ -283,21 +285,22 @@ export default function App() {
   }, [dbVotes]);
 
   const downloadCSV = (data, filename) => {
-    const BOM = '\uFEFF';
+    const BOM = '\uFEFF'; 
     const csvContent = BOM + data.map(row => row.join(',')).join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
+    document.body.appendChild(link);
     link.href = URL.createObjectURL(blob);
     link.download = `${filename}_${new Date().toLocaleDateString()}.csv`;
-    document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
   const handleExportResults = () => {
     const rows = [["선거 부문", "후보 이름", "득표수"]];
-    ['president', 'vp1', 'vp2', 'vp3'].forEach(cat => {
-      const candidatesList = candidates[cat];
+    const categories = ['president', 'vp1', 'vp2', 'vp3'];
+    categories.forEach(cat => {
+      const candidatesList = dbCandidates ? dbCandidates[cat] : INITIAL_CANDIDATES[cat];
       const key = cat === 'president' ? 'pres' : cat;
       candidatesList.forEach(p => rows.push([cat === 'president' ? '전교회장' : cat === 'vp1' ? '1학년 부회장' : cat === 'vp2' ? '2학년 부회장' : '3학년 부회장', p.name, stats[key][p.id] || 0]));
     });
@@ -329,7 +332,7 @@ export default function App() {
           <CheckCircle size={80} className="text-emerald-500 mx-auto mb-6" />
           <h2 className="text-3xl font-black mb-4 tracking-tight text-slate-900">투표 제출 완료</h2>
           <p className="text-slate-600 mb-8 font-medium">참여해 주셔서 감사합니다.</p>
-          <button onClick={() => window.location.reload()} className="w-full py-5 bg-slate-900 text-white rounded-2xl font-black transition-all active:scale-95 text-slate-100">닫기</button>
+          <button onClick={() => window.location.reload()} className="w-full py-5 bg-slate-900 text-white rounded-2xl font-black transition-all active:scale-95 text-slate-100 font-sans">닫기</button>
         </div>
       </div>
     );
@@ -340,9 +343,9 @@ export default function App() {
       <div className="max-w-3xl w-full">
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 bg-blue-600 text-white text-[10px] font-black px-3 py-1 rounded-full mb-4 uppercase tracking-[0.2em] shadow-lg text-slate-100">
-            <Lock size={12} /> SECURED SYSTEM V5.8
+            <Lock size={12} /> SECURED SYSTEM V6.9
           </div>
-          <h1 className="text-4xl font-black mb-2 tracking-tighter text-slate-900">2026학년도 신명여자중학교 전교 회장단 선거</h1>
+          <h1 className="text-4xl font-black mb-2 tracking-tighter">2026학년도 신명여자중학교 전교 회장단 선거</h1>
         </div>
 
         {!showAdminPanel ? (
@@ -384,7 +387,7 @@ export default function App() {
               </div>
             )}
 
-            {[2, 3, 4, 5].includes(step) && (
+            {[2, 3, 4, 5].includes(step) && dbCandidates && (
               <div className="animate-in slide-in-from-right-8 duration-500 text-slate-900">
                 <div className="flex justify-between items-end mb-8">
                   <h2 className="text-2xl font-black flex items-center gap-3 tracking-tight">
@@ -396,13 +399,17 @@ export default function App() {
                   <span className="text-xs font-black text-slate-400 tracking-widest uppercase font-sans">Step {step-1} / 4</span>
                 </div>
                 <div className="grid gap-4">
-                  {(step === 2 ? candidates.president : step === 3 ? candidates.vp1 : step === 4 ? candidates.vp2 : candidates.vp3).map(c => {
+                  {dbCandidates[step === 2 ? 'president' : `vp${step-2}`]?.map(c => {
                     const isSelected = (step===2 && selectedPres?.id===c.id) || (step===3 && selectedVP1?.id===c.id) || (step===4 && selectedVP2?.id===c.id) || (step===5 && selectedVP3?.id===c.id);
                     return (
                       <div key={c.id} onClick={() => {
                         if(step===2) setSelectedPres(c); if(step===3) setSelectedVP1(c); if(step===4) setSelectedVP2(c); if(step===5) setSelectedVP3(c);
                       }} className={`p-6 bg-white rounded-[1.5rem] border-4 cursor-pointer transition-all flex justify-between items-center ${isSelected ? 'border-blue-600 bg-blue-50 shadow-lg scale-[1.01]' : 'border-white hover:border-slate-100'}`}>
-                        <div><span className="text-[10px] font-black bg-slate-100 px-3 py-1 rounded-lg uppercase tracking-wider text-slate-900">기호 {c.id % 100}번</span><h3 className="text-xl font-black mt-2 text-slate-900">{c.name}</h3><p className="text-slate-500 font-bold text-sm italic">"{c.slogan}"</p></div>
+                        <div>
+                          <span className="text-[10px] font-black bg-slate-100 px-3 py-1 rounded-lg uppercase tracking-wider text-slate-900">기호 {c.id % 100}번</span>
+                          <h3 className="text-xl font-black mt-2 text-slate-900">{c.name}</h3>
+                          <p className="text-slate-500 font-bold text-sm italic">"{c.slogan}"</p>
+                        </div>
                         <CheckCircle size={28} className={isSelected ? 'text-blue-600' : 'text-slate-100'} />
                       </div>
                     );
@@ -410,7 +417,7 @@ export default function App() {
                 </div>
                 <div className="flex gap-4 mt-10">
                   <button onClick={() => setStep(step - 1)} className="flex-1 py-4 bg-white border border-slate-200 rounded-2xl font-black transition-all active:scale-95 flex items-center justify-center gap-2 text-slate-900"><ChevronLeft size={18}/>이전</button>
-                  <button disabled={(step===2 && !selectedPres) || (step===3 && !selectedVP1) || (step===4 && !selectedVP2) || (step===5 && !selectedVP3)} onClick={handleNextStep} className="flex-[2] py-4 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 text-slate-100">다음 단계 <ChevronRight size={18}/></button>
+                  <button disabled={(step===2 && !selectedPres) || (step===3 && !selectedVP1) || (step===4 && !selectedVP2) || (step===5 && !selectedVP3)} onClick={handleNextStep} className="flex-[2] py-4 bg-blue-600 text-white rounded-2xl font-black text-lg shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 text-slate-100 font-sans">다음 단계 <ChevronRight size={18}/></button>
                 </div>
               </div>
             )}
@@ -433,14 +440,14 @@ export default function App() {
                 </div>
                 <div className="flex gap-4">
                   <button onClick={() => setStep(5)} className="flex-1 py-5 bg-slate-100 rounded-2xl font-black transition-all active:scale-95 text-slate-900">수정</button>
-                  <button onClick={handleSubmit} className="flex-[2] py-5 bg-emerald-600 text-white rounded-2xl font-black text-xl shadow-xl hover:bg-emerald-700 active:scale-95 transition-all text-slate-100">최종 투표 제출</button>
+                  <button onClick={handleSubmit} className="flex-[2] py-5 bg-emerald-600 text-white rounded-2xl font-black text-xl shadow-xl hover:bg-emerald-700 active:scale-95 transition-all text-slate-100 font-sans">최종 투표 제출</button>
                 </div>
               </div>
             )}
           </div>
         ) : (
-          <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-200 overflow-hidden relative animate-in slide-in-from-bottom-4 text-left text-slate-900 text-slate-900">
-              {(resetConfirm || showResetAllModal) && (
+          <div className="bg-white rounded-[2.5rem] shadow-2xl border border-slate-200 overflow-hidden relative animate-in slide-in-from-bottom-4 text-left text-slate-900">
+              {!!(resetConfirm || showResetAllModal) && (
                 <div className="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 text-center text-white">
                   <div className="bg-white rounded-[2rem] p-8 max-w-sm w-full shadow-2xl animate-in zoom-in text-slate-900">
                     <div className={`w-16 h-16 ${resetConfirm ? 'bg-amber-100 text-amber-600' : 'bg-rose-100 text-rose-600'} rounded-full flex items-center justify-center mx-auto mb-4`}>
@@ -596,7 +603,7 @@ export default function App() {
             <button onClick={() => setShowAdminPanel(true)} className="flex items-center gap-2 mx-auto text-slate-400 hover:text-blue-600 font-bold text-sm transition-colors uppercase tracking-[0.2em] font-sans text-slate-400"><BarChart3 size={16} /> Admin Mode</button>
           )}
         </div>
-        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em] font-sans text-slate-900 text-slate-900">EMS Terminal V6.8 Final Build</footer>
+        <footer className="text-center mt-12 opacity-20 text-[10px] font-black uppercase tracking-[0.4em] font-sans text-slate-900 text-slate-900">EMS Terminal V6.9 Final Build</footer>
       </div>
     </div>
   );
